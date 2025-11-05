@@ -1,0 +1,5 @@
+/Users/joshuapacheco/projects/unity/game_dev/Mati's Pizza/.utmp/RelWithDebInfo/3u151g1x/arm64-v8a/CMakeFiles/edit_cache.dir
+/Users/joshuapacheco/projects/unity/game_dev/Mati's Pizza/.utmp/RelWithDebInfo/3u151g1x/arm64-v8a/CMakeFiles/rebuild_cache.dir
+/Users/joshuapacheco/projects/unity/game_dev/Mati's Pizza/.utmp/RelWithDebInfo/3u151g1x/arm64-v8a/GameActivity/CMakeFiles/game.dir
+/Users/joshuapacheco/projects/unity/game_dev/Mati's Pizza/.utmp/RelWithDebInfo/3u151g1x/arm64-v8a/GameActivity/CMakeFiles/edit_cache.dir
+/Users/joshuapacheco/projects/unity/game_dev/Mati's Pizza/.utmp/RelWithDebInfo/3u151g1x/arm64-v8a/GameActivity/CMakeFiles/rebuild_cache.dir

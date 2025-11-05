@@ -1,0 +1,17 @@
+/Users/joshuapacheco/projects/unity/game_dev/Mati's Pizza/Library/Bee/Android/Prj/IL2CPP/Gradle/unityLibrary/src/main/cpp/GameActivity/GAToUnityCallbacks.h
+/Users/joshuapacheco/projects/unity/game_dev/Mati's Pizza/Library/Bee/Android/Prj/IL2CPP/Gradle/unityLibrary/src/main/cpp/GameActivity/MacroEnd.h
+/Users/joshuapacheco/projects/unity/game_dev/Mati's Pizza/Library/Bee/Android/Prj/IL2CPP/Gradle/unityLibrary/src/main/cpp/GameActivity/MacroHeaderBegin.h
+/Users/joshuapacheco/projects/unity/game_dev/Mati's Pizza/Library/Bee/Android/Prj/IL2CPP/Gradle/unityLibrary/src/main/cpp/GameActivity/MacroSourceBegin.h
+/Users/joshuapacheco/projects/unity/game_dev/Mati's Pizza/Library/Bee/Android/Prj/IL2CPP/Gradle/unityLibrary/src/main/cpp/GameActivity/UGAApplication.h
+/Users/joshuapacheco/projects/unity/game_dev/Mati's Pizza/Library/Bee/Android/Prj/IL2CPP/Gradle/unityLibrary/src/main/cpp/GameActivity/UGAConfiguration.h
+/Users/joshuapacheco/projects/unity/game_dev/Mati's Pizza/Library/Bee/Android/Prj/IL2CPP/Gradle/unityLibrary/src/main/cpp/GameActivity/UGADebug.h
+/Users/joshuapacheco/projects/unity/game_dev/Mati's Pizza/Library/Bee/Android/Prj/IL2CPP/Gradle/unityLibrary/src/main/cpp/GameActivity/UGAEvents.h
+/Users/joshuapacheco/projects/unity/game_dev/Mati's Pizza/Library/Bee/Android/Prj/IL2CPP/Gradle/unityLibrary/src/main/cpp/GameActivity/UGAInput.h
+/Users/joshuapacheco/projects/unity/game_dev/Mati's Pizza/Library/Bee/Android/Prj/IL2CPP/Gradle/unityLibrary/src/main/cpp/GameActivity/UGASoftKeyboard.h
+/Users/joshuapacheco/projects/unity/game_dev/Mati's Pizza/Library/Bee/Android/Prj/IL2CPP/Gradle/unityLibrary/src/main/cpp/GameActivity/UGASoftKeyboardCallbacks.h
+/Users/joshuapacheco/projects/unity/game_dev/Mati's Pizza/Library/Bee/Android/Prj/IL2CPP/Gradle/unityLibrary/src/main/cpp/GameActivity/UGATypes.h
+/Users/joshuapacheco/projects/unity/game_dev/Mati's Pizza/Library/Bee/Android/Prj/IL2CPP/Gradle/unityLibrary/src/main/cpp/GameActivity/UGAVersion.h
+/Users/joshuapacheco/projects/unity/game_dev/Mati's Pizza/Library/Bee/Android/Prj/IL2CPP/Gradle/unityLibrary/src/main/cpp/GameActivity/UnityToGACallbacks.h
+/Users/joshuapacheco/projects/unity/game_dev/Mati's Pizza/Library/Bee/Android/Prj/IL2CPP/Gradle/unityLibrary/src/main/cpp/GameActivity/UnityToGAConfigurationCallbacks.h
+/Users/joshuapacheco/projects/unity/game_dev/Mati's Pizza/Library/Bee/Android/Prj/IL2CPP/Gradle/unityLibrary/src/main/cpp/GameActivity/UnityToGAKeyEventCallbacks.h
+/Users/joshuapacheco/projects/unity/game_dev/Mati's Pizza/Library/Bee/Android/Prj/IL2CPP/Gradle/unityLibrary/src/main/cpp/GameActivity/UnityToGAMotionEventCallbacks.h

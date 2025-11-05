@@ -1,0 +1,2 @@
+/Users/joshuapacheco/projects/unity/game_dev/Mati's Pizza/Library/Bee/Android/Prj/IL2CPP/Gradle/unityLibrary/src/main/cpp/CMakeLists.txt
+/Users/joshuapacheco/projects/unity/game_dev/Mati's Pizza/Library/Bee/Android/Prj/IL2CPP/Gradle/unityLibrary/src/main/cpp/GameActivity/CMakeLists.txt

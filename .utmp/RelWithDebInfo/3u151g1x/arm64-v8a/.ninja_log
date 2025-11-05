@@ -1,0 +1,10 @@
+# ninja log v5
+1	1553	1762341627196761619	GameActivity/CMakeFiles/game.dir/UGAEntry.cpp.o	3285c4272c079c9f
+0	1558	1762341627203329544	GameActivity/CMakeFiles/game.dir/UGAConfiguration.cpp.o	87f9f53c998fbfa8
+2	1559	1762341627197623626	GameActivity/CMakeFiles/game.dir/UGAInputKeyEvent.cpp.o	76a9061ef58ece4
+2	1566	1762341627214419420	GameActivity/CMakeFiles/game.dir/UGAInputMotionEvent.cpp.o	2285ba14a596f066
+1	1590	1762341627239574444	GameActivity/CMakeFiles/game.dir/UGADebug.cpp.o	4d7e46afd4358b
+2	1608	1762341627257822124	GameActivity/CMakeFiles/game.dir/UGASoftKeyboard.cpp.o	6d9042b78200b7f2
+1	1790	1762341627439812463	GameActivity/CMakeFiles/game.dir/UGAInput.cpp.o	9149880fb1a6540a
+0	1805	1762341627455057870	GameActivity/CMakeFiles/game.dir/UGAApplication.cpp.o	a73f47428653e46c
+1805	1964	1762341627614952041	/Users/joshuapacheco/projects/unity/game_dev/Mati's Pizza/Library/Bee/Android/Prj/IL2CPP/Gradle/unityLibrary/build/intermediates/cxx/RelWithDebInfo/3u151g1x/obj/arm64-v8a/libgame.so	74d53f44b16fcf26
