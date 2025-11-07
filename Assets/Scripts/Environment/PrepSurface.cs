@@ -2,15 +2,29 @@ using UnityEngine;
 
 public class PrepSurface : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    [SerializeField] private bool isDoughOnSurface = false;
+
+    private void OnTriggerEnter(Collider other)
     {
-        
+        if (other.CompareTag("dough"))
+        {
+            isDoughOnSurface = true;
+            Debug.Log($"Dough entered prep surface: {other.gameObject.name}");
+        }
     }
 
-    // Update is called once per frame
-    void Update()
+    private void OnTriggerExit(Collider other)
     {
-        
+        if (other.CompareTag("dough"))
+        {
+            isDoughOnSurface = false;
+            Debug.Log($"Dough left prep surface: {other.gameObject.name}");
+        }
+    }
+
+    public bool IsDoughOnSurface()
+    {
+        return isDoughOnSurface;
     }
 }
+
