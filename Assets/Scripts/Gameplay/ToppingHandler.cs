@@ -5,8 +5,11 @@ public class ToppingHandler : MonoBehaviour
 {
     [SerializeField] private PizzaController pizzaController;
 
-    [Header("Recipe Selection")]
     public enum PizzaType { Margherita, Pepperoni }
+    [Header("Recipe Selection")]
+
+    // TODO: selected pizza to be inherited from pizza controller 
+
     [SerializeField] private PizzaType selectedPizza = PizzaType.Margherita;
 
     // Recipe requirements
@@ -17,6 +20,7 @@ public class ToppingHandler : MonoBehaviour
 
     void Start()
     {
+        //TODO change this to scriptable object later
         // Define recipes
         recipes[PizzaType.Margherita] = new Dictionary<string, int>
         {
@@ -38,7 +42,7 @@ public class ToppingHandler : MonoBehaviour
         if (other.CompareTag("cheese") || other.CompareTag("pepperoni"))
         {
             string toppingType = other.tag;
-            
+
             // Add topping to current count
             if (!currentToppings.ContainsKey(toppingType))
             {
@@ -56,7 +60,7 @@ public class ToppingHandler : MonoBehaviour
     private void CheckRecipeCompletion()
     {
         Dictionary<string, int> requiredToppings = recipes[selectedPizza];
-        
+
         // Check if all required toppings are met
         foreach (var requirement in requiredToppings)
         {
@@ -77,10 +81,11 @@ public class ToppingHandler : MonoBehaviour
     private void OnRecipeComplete()
     {
         Debug.Log($"<color=green>Recipe complete for {selectedPizza} pizza!</color>");
-        
+
         if (pizzaController != null)
         {
-            pizzaController.CompleteToppingStage();
+            // TODO: create oncomplete topping stage script function
+            //pizzaController.CompleteToppingStage();
         }
     }
 }

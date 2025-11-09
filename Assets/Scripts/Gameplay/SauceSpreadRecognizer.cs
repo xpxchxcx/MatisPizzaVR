@@ -30,10 +30,12 @@ public class SauceSpreadRecognizer : MonoBehaviour
     private void OnSauceComplete()
     {
         Debug.Log("<color=green>Sauce spreading complete!</color>");
-        
+
         if (pizzaController != null)
         {
-            pizzaController.CompleteSauceStage();
+            // TODO: create on Complete sauce stage script function
+
+            //pizzaController.CompleteSauceStage();
         }
     }
 }

@@ -2,13 +2,17 @@ using UnityEngine;
 
 public class PrepSurface : MonoBehaviour
 {
-    [SerializeField] private bool isDoughOnSurface = false;
 
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("dough"))
         {
-            isDoughOnSurface = true;
+            DoughController currentDoughController = other.GetComponent<DoughController>();
+            if (currentDoughController != null)
+            {
+                currentDoughController.setDoughSurfaceTrue();
+            }
+
             Debug.Log($"Dough entered prep surface: {other.gameObject.name}");
         }
     }
@@ -17,14 +21,14 @@ public class PrepSurface : MonoBehaviour
     {
         if (other.CompareTag("dough"))
         {
-            isDoughOnSurface = false;
-            Debug.Log($"Dough left prep surface: {other.gameObject.name}");
-        }
-    }
+            DoughController currentDoughController = other.GetComponent<DoughController>();
+            if (currentDoughController != null)
+            {
+                currentDoughController.setDoughSurfaceFalse();
+            }
 
-    public bool IsDoughOnSurface()
-    {
-        return isDoughOnSurface;
+            Debug.Log($"Dough exited prep surface: {other.gameObject.name}");
+        }
     }
 }
 

@@ -3,13 +3,19 @@ using UnityEngine.InputSystem;
 
 public class DoughController : MonoBehaviour
 {
-    [Header("References")]
-    [SerializeField] private PrepSurface prepSurface;
+
     [SerializeField] private PizzaController pizzaController;
 
     [Header("Kneading Settings")]
     [SerializeField] private int kneadingRequired = 5;
     private int currentKneadingCount = 0;
+
+    private bool isDoughOnSurface = false;
+
+    void Start()
+    {
+        pizzaController = GetComponent<PizzaController>();
+    }
 
     void Update()
     {
@@ -24,7 +30,7 @@ public class DoughController : MonoBehaviour
     public void SimulateKneadingMotion()
     {
         // Check if dough is on the prep surface
-        if (prepSurface != null && prepSurface.IsDoughOnSurface())
+        if (isDoughOnSurface)
         {
             currentKneadingCount++;
             Debug.Log($"Kneading motion detected! Count: {currentKneadingCount}/{kneadingRequired}");
@@ -41,11 +47,21 @@ public class DoughController : MonoBehaviour
     private void OnKneadingComplete()
     {
         Debug.Log("<color=green>Kneading complete! Dough is ready to be flattened!</color>");
-        
+
         // Call PizzaController when ready
         if (pizzaController != null)
         {
-            pizzaController.OnDoughFlattened();
+            // TODO: create on dough flattened script function
+            //pizzaController.OnDoughFlattened();
         }
+    }
+
+    public void setDoughSurfaceTrue()
+    {
+        isDoughOnSurface = true;
+    }
+    public void setDoughSurfaceFalse()
+    {
+        isDoughOnSurface = false;
     }
 }
