@@ -1,7 +1,10 @@
+using System;
 using UnityEngine;
 
 public class PrepSurface : MonoBehaviour
 {
+    public static event Action<DoughController> OnDoughPlaced;
+    public static event Action<DoughController> OnDoughRemoved;
 
     private void OnTriggerEnter(Collider other)
     {
@@ -14,6 +17,8 @@ public class PrepSurface : MonoBehaviour
             }
 
             Debug.Log($"Dough entered prep surface: {other.gameObject.name}");
+            OnDoughPlaced?.Invoke(currentDoughController);
+
         }
     }
 
@@ -26,7 +31,7 @@ public class PrepSurface : MonoBehaviour
             {
                 currentDoughController.setDoughSurfaceFalse();
             }
-
+            OnDoughRemoved?.Invoke(currentDoughController);
             Debug.Log($"Dough exited prep surface: {other.gameObject.name}");
         }
     }

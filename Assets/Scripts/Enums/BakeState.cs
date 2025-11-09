@@ -1,16 +1,13 @@
 using UnityEngine;
 
-public class BakeState : MonoBehaviour
+/// <summary>
+/// Tracks the pizza’s baking condition while in the oven.
+/// </summary>
+public enum BakeState
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    Raw,
+    DoughPlaced,
+    Baking,
+    Cooked,
+    Burnt
 }

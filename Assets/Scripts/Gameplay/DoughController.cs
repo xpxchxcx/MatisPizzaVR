@@ -64,4 +64,11 @@ public class DoughController : MonoBehaviour
     {
         isDoughOnSurface = false;
     }
+
+
+
+    public PizzaController GetPizzaController()
+    {
+        return pizzaController;
+    }
 }

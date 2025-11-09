@@ -1,16 +1,16 @@
 using UnityEngine;
 
-public class AssemblyPhase : MonoBehaviour
+/// <summary>
+/// Tracks which stage of pizza assembly the player is currently on.
+/// </summary>
+public enum AssemblyPhase
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    None,           // not yet started
+    Kneading,       // dough being kneaded
+    SauceStage,     // sauce spreading
+    ToppingsStage,  // adding toppings
+    ReadyForOven,   // assembled, ready to bake
+    Baking,         // inside oven
+    Baked,          // fully baked
+    Served          // delivered to customer
 }
