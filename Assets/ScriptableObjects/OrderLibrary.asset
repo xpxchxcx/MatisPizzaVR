@@ -12,4 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3c3be4d7630d3426a97970bd1f7d9529, type: 3}
   m_Name: OrderLibrary
   m_EditorClassIdentifier: Assembly-CSharp::OrderLibrary
-  possibleOrders: []
+  possibleOrders:
+  - {fileID: 11400000, guid: a2c6c8412061c44d7ad74cff9e31391f, type: 2}
+  - {fileID: 11400000, guid: 3cf7eed48f8474e3da8987f4af2de60a, type: 2}
+  - {fileID: 11400000, guid: 42efebc28a5ee4d9e83b12af7ffc555b, type: 2}
+  - {fileID: 11400000, guid: c0370e9ea347e4505ae6887b2e7be044, type: 2}
+  - {fileID: 11400000, guid: d7b30e57f2b6545b883c5eb7f2057fe8, type: 2}
+  - {fileID: 11400000, guid: 9e52d9286ed194a138deb35b1d6f7e5b, type: 2}
+  - {fileID: 11400000, guid: 72f9dc2c5334c486d820abf07da1c35b, type: 2}
+  - {fileID: 11400000, guid: d5f644226a586406ca5e715daf2dec7a, type: 2}
