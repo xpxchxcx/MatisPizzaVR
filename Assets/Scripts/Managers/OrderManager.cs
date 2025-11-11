@@ -73,8 +73,9 @@ public class OrderManager : Singleton<OrderManager>
         OrderData newOrder = OrderLibrary.Instantiate(template);
         newOrder.isInProgress = false;
         newOrder.isCompleted = false;
+        orderCounter++;
+        newOrder.orderId = $"ORD-{orderCounter:D3}"; // e.g. ORD-001, ORD-002
 
-        newOrder.orderId = $"ORD-{++orderCounter:D3}"; // ORD-001, ORD-002, etc.
 
         activeOrders.Add(newOrder);
         Debug.Log($"[OrderManager] Spawned new order: {newOrder.pizzaName}");
@@ -120,42 +121,40 @@ public class OrderManager : Singleton<OrderManager>
         Debug.Log("[OrderManager] Cleared all orders.");
     }
 
-    internal void ValidateOrder(PizzaController pizza)
+    internal bool ValidateOrder(PizzaController pizza)
     {
         if (pizza == null)
         {
             Debug.LogError("[OrderManager] Tried to validate a null PizzaController!");
-            return;
+            return false;
         }
 
-        // Check if there are any active orders
         if (activeOrders == null || activeOrders.Count == 0)
         {
             Debug.LogWarning("[OrderManager] No active orders to validate against!");
-            return;
+            return false;
         }
 
-        // Try to find an order that matches this pizza's name
         OrderData matchedOrder = activeOrders.Find(o => o.pizzaName == pizza.pizzaName);
-
         if (matchedOrder == null)
         {
             Debug.LogWarning($"[OrderManager] No matching active order found for pizza: {pizza.pizzaName}");
-            return;
+            return false;
         }
 
-        // Ask PizzaController if it satisfies the recipe
         bool isValid = pizza.ValidateAgainstOrder();
 
         if (isValid)
         {
-            // Mark order as completed
             MarkOrderCompleted(matchedOrder);
             Debug.Log($"[OrderManager] Pizza '{pizza.pizzaName}' validated and completed successfully!");
+            return true;
         }
         else
         {
             Debug.LogWarning($"[OrderManager] Pizza '{pizza.pizzaName}' failed validation (wrong toppings, burnt, or incomplete).");
+            return false;
         }
     }
+
 }
