@@ -15,11 +15,13 @@ MonoBehaviour:
   orderId: 007
   pizzaName: Supreme
   requiredToppings:
-  - black olive
-  - pepperoni
-  - capsicum
-  - cheese
+  - toppingName: pepperoni
+    requiredCount: 9
+  - toppingName: capsicum
+    requiredCount: 6
+  - toppingName: black olive
+    requiredCount: 9
   timeLimit: 60
-  scoreValue: 100
+  maxScoreValue: 100
   isInProgress: 0
   isCompleted: 0

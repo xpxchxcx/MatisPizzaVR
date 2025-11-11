@@ -25,11 +25,6 @@ public class AssemblyManager : Singleton<AssemblyManager>
     /// </summary>
     public void RegisterPizza(PizzaController pizza, OrderData order)
     {
-        if (pizza == null)
-        {
-            Debug.LogError("[AssemblyManager] Tried to register null PizzaController!");
-            return;
-        }
 
         if (activePizzas.Contains(pizza))
         {
@@ -116,15 +111,11 @@ public class AssemblyManager : Singleton<AssemblyManager>
     }
 
     // Optional event hooks if you're using PrepSurface events
-    private void HandleDoughPlaced(DoughController dough)
+    private void HandleDoughPlaced(GameObject go)
     {
-        PizzaController pizza = dough.GetPizzaController();
-        if (pizza == null)
-        {
-            Debug.LogWarning("[AssemblyManager] Dough placed but has no PizzaController attached!");
-            return;
-        }
+        PizzaController pizza = go.GetComponent<PizzaController>();
 
+        // basically just auto-assign the next order to this pizza (simplicity sake)
         OrderData nextOrder = OrderManager.Instance.GetNextPendingOrder();
         if (nextOrder != null)
             RegisterPizza(pizza, nextOrder);
@@ -132,10 +123,8 @@ public class AssemblyManager : Singleton<AssemblyManager>
             Debug.Log("[AssemblyManager] No pending order to assign.");
     }
 
-    private void HandleDoughRemoved(DoughController dough)
+    private void HandleDoughRemoved(GameObject go)
     {
-        PizzaController pizza = dough.GetPizzaController();
-        if (pizza != null)
-            UnregisterPizza(pizza);
+        // do nothing for now
     }
 }

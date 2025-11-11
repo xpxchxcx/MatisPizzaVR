@@ -15,11 +15,15 @@ MonoBehaviour:
   orderId: 005
   pizzaName: Mexicana
   requiredToppings:
-  - black olive
-  - white cheese
-  - ham
-  - capsicum
+  - toppingName: black olives
+    requiredCount: 9
+  - toppingName: mozzarella
+    requiredCount: 6
+  - toppingName: ham
+    requiredCount: 9
+  - toppingName: capsicum
+    requiredCount: 6
   timeLimit: 60
-  scoreValue: 100
+  maxScoreValue: 100
   isInProgress: 0
   isCompleted: 0

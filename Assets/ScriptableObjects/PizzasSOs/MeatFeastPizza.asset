@@ -15,10 +15,13 @@ MonoBehaviour:
   orderId: 003
   pizzaName: MeatFeast
   requiredToppings:
-  - pepperoni
-  - cheese
-  - meat
+  - toppingName: pepperoni
+    requiredCount: 9
+  - toppingName: cheese
+    requiredCount: 6
+  - toppingName: black meat
+    requiredCount: 6
   timeLimit: 60
-  scoreValue: 100
+  maxScoreValue: 100
   isInProgress: 0
   isCompleted: 0

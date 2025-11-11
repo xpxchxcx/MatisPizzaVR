@@ -7,11 +7,21 @@ public class OrderData : ScriptableObject
     [Header("Order Info")]
     public string orderId;
     public string pizzaName;
-    public List<string> requiredToppings;
+
+    [Header("Topping Requirements")]
+    public List<ToppingRequirement> requiredToppings;  // each topping has name + required count
+
     public float timeLimit = 60f;  // seconds
-    public int scoreValue = 100;
+    public int maxScoreValue = 100;
 
     [Header("Status")]
     public bool isInProgress;
     public bool isCompleted;
+}
+
+[System.Serializable]
+public class ToppingRequirement
+{
+    public string toppingName;
+    public int requiredCount;
 }

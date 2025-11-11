@@ -15,9 +15,11 @@ MonoBehaviour:
   orderId: 006
   pizzaName: FarmHouse
   requiredToppings:
-  - cheese
-  - mushroom
+  - toppingName: mushroom
+    requiredCount: 9
+  - toppingName: cheese
+    requiredCount: 6
   timeLimit: 60
-  scoreValue: 100
+  maxScoreValue: 100
   isInProgress: 0
   isCompleted: 0

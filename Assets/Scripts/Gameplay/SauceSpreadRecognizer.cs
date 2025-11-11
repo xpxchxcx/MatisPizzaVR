@@ -1,9 +1,10 @@
+using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 public class SauceSpreadRecognizer : MonoBehaviour
 {
-    [SerializeField] private PizzaController pizzaController;
+    public static event Action OnSauceComplete;
     [SerializeField] private float sauceVolumeRequired = 100f;
     private float currentSauceVolume = 0f;
 
@@ -12,30 +13,28 @@ public class SauceSpreadRecognizer : MonoBehaviour
         // Debug: S key to simulate sauce spreading
         if (Keyboard.current != null && Keyboard.current[Key.S].wasPressedThisFrame)
         {
-            CheckSauceMotion();
+            simulateSauceMotion();
         }
+
+        CheckSauceMotion();
     }
 
-    public void CheckSauceMotion()
+    public void simulateSauceMotion()
     {
         currentSauceVolume += 20f;
         Debug.Log($"Sauce spreading! Volume: {currentSauceVolume}/{sauceVolumeRequired}");
 
+    }
+
+    public void CheckSauceMotion()
+    {
+        // put sauce motion detection logic here (e.g., hand tracking data)
         if (currentSauceVolume >= sauceVolumeRequired)
         {
-            OnSauceComplete();
+            Debug.Log("<color=green>Sauce spreading complete!</color>");
+            OnSauceComplete?.Invoke();
         }
     }
 
-    private void OnSauceComplete()
-    {
-        Debug.Log("<color=green>Sauce spreading complete!</color>");
 
-        if (pizzaController != null)
-        {
-            // TODO: create on Complete sauce stage script function
-
-            //pizzaController.CompleteSauceStage();
-        }
-    }
 }

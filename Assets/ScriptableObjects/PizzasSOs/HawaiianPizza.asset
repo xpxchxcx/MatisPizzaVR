@@ -15,10 +15,13 @@ MonoBehaviour:
   orderId: 002
   pizzaName: Haiwaiian
   requiredToppings:
-  - pineapple
-  - cheese
-  - ham
+  - toppingName: pineapple
+    requiredCount: 6
+  - toppingName: cheese
+    requiredCount: 6
+  - toppingName: ham
+    requiredCount: 6
   timeLimit: 60
-  scoreValue: 100
+  maxScoreValue: 100
   isInProgress: 0
   isCompleted: 0

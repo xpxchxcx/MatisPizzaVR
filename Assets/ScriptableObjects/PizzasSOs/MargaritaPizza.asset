@@ -15,8 +15,13 @@ MonoBehaviour:
   orderId: 008
   pizzaName: Margarita
   requiredToppings:
-  - white cheese
+  - toppingName: cheese
+    requiredCount: 6
+  - toppingName: mozzarella
+    requiredCount: 6
+  - toppingName: ham
+    requiredCount: 6
   timeLimit: 60
-  scoreValue: 100
+  maxScoreValue: 100
   isInProgress: 0
   isCompleted: 0

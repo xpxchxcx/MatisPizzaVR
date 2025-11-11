@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections.Generic;
+using System;
 
 public class PizzaController : MonoBehaviour
 {
@@ -19,6 +20,23 @@ public class PizzaController : MonoBehaviour
     public bool isServed = false;
 
     private float bakeTimer = 0f;
+
+
+
+
+    private void OnEnable()
+    {
+        SauceSpreadRecognizer.OnSauceComplete += OnSauceCompleted;
+        DoughController.OnDoughFlattened += OnDoughFlattened;
+    }
+
+    private void OnDisable()
+    {
+        // unsubscribe to prevent leaks
+        SauceSpreadRecognizer.OnSauceComplete -= OnSauceCompleted;
+        DoughController.OnDoughFlattened -= OnDoughFlattened;
+    }
+
 
     /// <summary>
     /// Initialize the pizza from a given order.
@@ -129,7 +147,7 @@ public class PizzaController : MonoBehaviour
     }
 
     /// <summary>
-    /// Called when pizza is removed from oven or placed in ServeZone.
+    /// Called when pizza is placed in ServeZone.
     /// </summary>
     public void OnServed()
     {
@@ -146,7 +164,7 @@ public class PizzaController : MonoBehaviour
         if (orderData == null) return false;
         if (!isCooked || !isSauced) return false;
 
-        var required = new HashSet<string>(orderData.requiredToppings);
+        var required = new HashSet<string>((IEnumerable<string>)orderData.requiredToppings);
         var added = new HashSet<string>(toppingsAdded);
 
         bool toppingsMatch = required.SetEquals(added);

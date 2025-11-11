@@ -33570,6 +33570,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: OrderCard
       objectReference: {fileID: 0}
+    - target: {fileID: 8598504959674675398, guid: 199c8bc339f7641a38ba28364b15351a, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

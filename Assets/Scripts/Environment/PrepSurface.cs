@@ -3,21 +3,21 @@ using UnityEngine;
 
 public class PrepSurface : MonoBehaviour
 {
-    public static event Action<DoughController> OnDoughPlaced;
-    public static event Action<DoughController> OnDoughRemoved;
+    public static event Action<GameObject> OnDoughPlaced;
+    public static event Action<GameObject> OnDoughRemoved;
 
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("dough"))
         {
-            DoughController currentDoughController = other.GetComponent<DoughController>();
-            if (currentDoughController != null)
-            {
-                currentDoughController.setDoughSurfaceTrue();
-            }
+            GameObject go = other.gameObject;
+            DoughController currentDoughController = go.GetComponent<DoughController>();
+
+            currentDoughController.setDoughSurfaceTrue();
+
 
             Debug.Log($"Dough entered prep surface: {other.gameObject.name}");
-            OnDoughPlaced?.Invoke(currentDoughController);
+            OnDoughPlaced?.Invoke(go);
 
         }
     }
@@ -26,12 +26,13 @@ public class PrepSurface : MonoBehaviour
     {
         if (other.CompareTag("dough"))
         {
-            DoughController currentDoughController = other.GetComponent<DoughController>();
-            if (currentDoughController != null)
-            {
-                currentDoughController.setDoughSurfaceFalse();
-            }
-            OnDoughRemoved?.Invoke(currentDoughController);
+            GameObject go = other.gameObject;
+
+            DoughController currentDoughController = go.GetComponent<DoughController>();
+
+            currentDoughController.setDoughSurfaceFalse();
+
+            OnDoughRemoved?.Invoke(go);
             Debug.Log($"Dough exited prep surface: {other.gameObject.name}");
         }
     }

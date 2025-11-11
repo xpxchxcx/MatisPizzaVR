@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -12,6 +13,9 @@ public class DoughController : MonoBehaviour
 
     private bool isDoughOnSurface = false;
 
+    public static event Action OnDoughFlattened;
+
+
     void Start()
     {
         pizzaController = GetComponent<PizzaController>();
@@ -24,6 +28,8 @@ public class DoughController : MonoBehaviour
         {
             SimulateKneadingMotion();
         }
+
+
     }
 
     // Simulate kneading motion (called by 'M' key for debugging, later by VR hand tracking)
@@ -38,23 +44,29 @@ public class DoughController : MonoBehaviour
             // Check if we've reached the required number of kneads
             if (currentKneadingCount >= kneadingRequired)
             {
-                OnKneadingComplete();
+                OnDoughFlattened?.Invoke();
             }
         }
     }
 
-    // Called when kneading is complete
-    private void OnKneadingComplete()
+    // Register kneading motion (to be called by VR hand tracking system)
+    public void RegisterKnead()
     {
-        Debug.Log("<color=green>Kneading complete! Dough is ready to be flattened!</color>");
-
-        // Call PizzaController when ready
-        if (pizzaController != null)
+        // Check if dough is on the prep surface
+        if (isDoughOnSurface)
         {
-            // TODO: create on dough flattened script function
-            //pizzaController.OnDoughFlattened();
+            currentKneadingCount++;
+            Debug.Log($"Kneading motion detected! Count: {currentKneadingCount}/{kneadingRequired}");
+
+            // Check if we've reached the required number of kneads
+            if (currentKneadingCount >= kneadingRequired)
+            {
+                OnDoughFlattened?.Invoke();
+            }
         }
     }
+
+
 
     public void setDoughSurfaceTrue()
     {

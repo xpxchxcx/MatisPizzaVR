@@ -15,9 +15,11 @@ MonoBehaviour:
   orderId: 001
   pizzaName: Pepperoni
   requiredToppings:
-  - pepperoni
-  - cheese
+  - toppingName: pepperoni
+    requiredCount: 9
+  - toppingName: cheese
+    requiredCount: 6
   timeLimit: 60
-  scoreValue: 100
+  maxScoreValue: 100
   isInProgress: 0
   isCompleted: 0
