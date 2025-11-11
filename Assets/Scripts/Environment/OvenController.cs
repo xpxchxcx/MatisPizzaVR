@@ -18,14 +18,13 @@ public class OvenController : MonoBehaviour
     public KeyCode debugCollectKey = KeyCode.Space;
 
     private GameObject currentPizza;
-    private bool isCollectable = false;
     private Coroutine ovenRoutine;
 
     // VR hook: callable from XR event or hand trigger
     // could u open palm gesture to get it -> hook up this func
     public void CollectPizzaVR()
     {
-        if (currentPizza == null || !isCollectable) return;
+        if (currentPizza == null) return;
 
         var pizza = currentPizza.GetComponent<PizzaController>();
         if (pizza != null)
@@ -41,7 +40,6 @@ public class OvenController : MonoBehaviour
         if (pizza.assemblyPhase != AssemblyPhase.ReadyForOven)
         {
             Debug.Log($"[OvenController] {pizza.pizzaName} not ready for oven: destroying!");
-            Destroy(other.gameObject);
             return;
         }
 
@@ -62,12 +60,11 @@ public class OvenController : MonoBehaviour
         pizza.OnBaked();
         currentPizza.transform.position = outputPoint.position;
         currentPizza.SetActive(true);
-        isCollectable = true;
 
         Debug.Log($"[OvenController] {pizza.pizzaName} is ready to collect! (VR or Space key)");
 
         float burnTimer = 0f;
-        while (burnTimer < burnGraceTime && isCollectable)
+        while (burnTimer < burnGraceTime)
         {
             // Debug fallback (non-VR)
             if (Input.GetKeyDown(debugCollectKey))
@@ -82,13 +79,12 @@ public class OvenController : MonoBehaviour
 
         // Burn if uncollected
         pizza.UpdateBaking(bakeTime + burnGraceTime, bakeTime, bakeTime + burnGraceTime);
-        isCollectable = false;
+        pizza.isBurnt = true;
         Debug.Log($"[OvenController] {pizza.pizzaName} burned due to late collection!");
     }
 
     private void CollectPizza(PizzaController pizza)
     {
-        isCollectable = false;
         pizza.isCooked = true;
         pizza.bakeState = BakeState.Cooked;
 
@@ -101,7 +97,6 @@ public class OvenController : MonoBehaviour
         if (other.gameObject == currentPizza)
         {
             currentPizza = null;
-            isCollectable = false;
             if (ovenRoutine != null) StopCoroutine(ovenRoutine);
         }
     }
