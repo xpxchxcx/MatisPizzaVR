@@ -28,12 +28,11 @@ public class ToppingSurface : MonoBehaviour
             GameObject go = other.gameObject;
             PizzaController currentPizzaController = go.GetComponent<PizzaController>();
 
-            if (currentPizzaController != null && currentPizzaController.assemblyPhase == AssemblyPhase.ToppingsStage)
-            {
-                go.GetComponent<ToppingHandler>().SetToppingAllowed(false);
-                Debug.Log($"flattened Dough exited topping prep surface: {other.gameObject.name}");
 
-            }
+            go.GetComponent<ToppingHandler>().SetToppingAllowed(false);
+            Debug.Log($"flattened Dough exited topping prep surface: {other.gameObject.name}");
+
+
 
         }
     }

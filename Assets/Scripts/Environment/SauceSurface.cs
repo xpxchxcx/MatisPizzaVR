@@ -29,12 +29,11 @@ public class SauceSurface : MonoBehaviour
             GameObject go = other.gameObject;
             PizzaController currentPizzaController = go.GetComponent<PizzaController>();
 
-            if (currentPizzaController != null && currentPizzaController.assemblyPhase == AssemblyPhase.SauceStage)
-            {
-                go.GetComponent<SauceSpreadRecognizer>().setCanBeSauced(false);
-                Debug.Log($"flattened Dough exited saucing prep surface: {other.gameObject.name}");
 
-            }
+            go.GetComponent<SauceSpreadRecognizer>().setCanBeSauced(false);
+            Debug.Log($"flattened Dough exited saucing prep surface: {other.gameObject.name}");
+
+
 
         }
     }

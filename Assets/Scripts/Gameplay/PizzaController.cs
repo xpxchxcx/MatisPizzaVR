@@ -94,6 +94,11 @@ public class PizzaController : MonoBehaviour
         Debug.Log($"[PizzaController] {pizzaName} ready for oven!");
     }
 
+    public void OnBaked()
+    {
+        assemblyPhase = AssemblyPhase.Baked;
+    }
+
     public void StartBaking()
     {
         if (assemblyPhase != AssemblyPhase.ReadyForOven)
