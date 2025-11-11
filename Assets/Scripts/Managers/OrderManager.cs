@@ -22,6 +22,8 @@ public class OrderManager : Singleton<OrderManager>
     [Tooltip("Maximum number of active orders allowed at a time.")]
     public int maxActiveOrders = 3;
 
+    private static int orderCounter = 0;
+
 
     public event Action<OrderData> OnOrderSpawned;
     public event Action<OrderData> OnOrderCompleted;
@@ -69,8 +71,10 @@ public class OrderManager : Singleton<OrderManager>
 
         // Clone the template so we don't modify the original ScriptableObject
         OrderData newOrder = OrderLibrary.Instantiate(template);
-        newOrder.isInProgress = true;
+        newOrder.isInProgress = false;
         newOrder.isCompleted = false;
+
+        newOrder.orderId = $"ORD-{++orderCounter:D3}"; // ORD-001, ORD-002, etc.
 
         activeOrders.Add(newOrder);
         Debug.Log($"[OrderManager] Spawned new order: {newOrder.pizzaName}");

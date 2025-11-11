@@ -13,7 +13,7 @@ public class PizzaController : MonoBehaviour
     public BakeState bakeState = BakeState.Raw;
 
     [Header("Toppings")]
-    public List<string> toppingsAdded = new();
+    public Dictionary<string, int> toppings = new();
     public bool isSauced = false;
     public bool isCooked = false;
     public bool isBurnt = false;
@@ -21,22 +21,20 @@ public class PizzaController : MonoBehaviour
 
     private float bakeTimer = 0f;
 
-
-
-
     private void OnEnable()
     {
         SauceSpreadRecognizer.OnSauceComplete += OnSauceCompleted;
         DoughController.OnDoughFlattened += OnDoughFlattened;
+        ToppingHandler.OnToppingsCompleted += OnToppingsCompleted;
     }
 
     private void OnDisable()
     {
-        // unsubscribe to prevent leaks
         SauceSpreadRecognizer.OnSauceComplete -= OnSauceCompleted;
         DoughController.OnDoughFlattened -= OnDoughFlattened;
-    }
+        ToppingHandler.OnToppingsCompleted -= OnToppingsCompleted;
 
+    }
 
     /// <summary>
     /// Initialize the pizza from a given order.
@@ -53,23 +51,17 @@ public class PizzaController : MonoBehaviour
         isBurnt = false;
         isServed = false;
 
-        toppingsAdded.Clear();
+        toppings.Clear();
 
         Debug.Log($"[PizzaController] Initialized pizza for order: {pizzaName}");
     }
 
-    /// <summary>
-    /// Called when kneading stage completes (player finishes motion).
-    /// </summary>
     public void OnDoughFlattened()
     {
         assemblyPhase = AssemblyPhase.SauceStage;
         Debug.Log($"[PizzaController] {pizzaName} flattened, moving to Sauce Stage.");
     }
 
-    /// <summary>
-    /// Called when sauce spreading completes.
-    /// </summary>
     public void OnSauceCompleted()
     {
         isSauced = true;
@@ -78,7 +70,7 @@ public class PizzaController : MonoBehaviour
     }
 
     /// <summary>
-    /// Adds a topping to this pizza.
+    /// Adds a topping to this pizza (tracks count).
     /// </summary>
     public void AddTopping(string toppingName)
     {
@@ -88,22 +80,20 @@ public class PizzaController : MonoBehaviour
             return;
         }
 
-        toppingsAdded.Add(toppingName);
-        Debug.Log($"[PizzaController] Added topping: {toppingName}");
+        if (toppings.ContainsKey(toppingName))
+            toppings[toppingName]++;
+        else
+            toppings[toppingName] = 1;
+
+        Debug.Log($"[PizzaController] Added topping: {toppingName} (x{toppings[toppingName]})");
     }
 
-    /// <summary>
-    /// Called when all toppings are added and pizza is ready to bake.
-    /// </summary>
     public void OnToppingsCompleted()
     {
         assemblyPhase = AssemblyPhase.ReadyForOven;
         Debug.Log($"[PizzaController] {pizzaName} ready for oven!");
     }
 
-    /// <summary>
-    /// Begins baking process.
-    /// </summary>
     public void StartBaking()
     {
         if (assemblyPhase != AssemblyPhase.ReadyForOven)
@@ -119,9 +109,6 @@ public class PizzaController : MonoBehaviour
         Debug.Log($"[PizzaController] {pizzaName} started baking.");
     }
 
-    /// <summary>
-    /// Simulate baking over time (can be called from OvenController).
-    /// </summary>
     public void UpdateBaking(float deltaTime, float bakeTime, float burnTime)
     {
         if (assemblyPhase != AssemblyPhase.Baking)
@@ -146,9 +133,6 @@ public class PizzaController : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// Called when pizza is placed in ServeZone.
-    /// </summary>
     public void OnServed()
     {
         isServed = true;
@@ -157,18 +141,30 @@ public class PizzaController : MonoBehaviour
     }
 
     /// <summary>
-    /// Checks whether pizza meets order requirements.
+    /// Checks whether pizza meets order topping requirements.
     /// </summary>
     public bool ValidateAgainstOrder()
     {
         if (orderData == null) return false;
         if (!isCooked || !isSauced) return false;
+        if (isBurnt) return false;
 
-        var required = new HashSet<string>((IEnumerable<string>)orderData.requiredToppings);
-        var added = new HashSet<string>(toppingsAdded);
+        foreach (var req in orderData.requiredToppings)
+        {
+            if (!toppings.TryGetValue(req.toppingName, out int count))
+            {
+                Debug.LogWarning($"[PizzaController] Missing topping: {req.toppingName}");
+                return false;
+            }
 
-        bool toppingsMatch = required.SetEquals(added);
+            if (count < req.requiredCount)
+            {
+                Debug.LogWarning($"[PizzaController] Not enough {req.toppingName} (needed {req.requiredCount}, got {count})");
+                return false;
+            }
+        }
 
-        return toppingsMatch && !isBurnt;
+        Debug.Log($"[PizzaController] {pizzaName} validated successfully!");
+        return true;
     }
 }

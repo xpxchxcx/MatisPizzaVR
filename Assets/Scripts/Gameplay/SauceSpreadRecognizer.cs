@@ -7,6 +7,7 @@ public class SauceSpreadRecognizer : MonoBehaviour
     public static event Action OnSauceComplete;
     [SerializeField] private float sauceVolumeRequired = 100f;
     private float currentSauceVolume = 0f;
+    private bool canBeSauced = false;
 
     void Update()
     {
@@ -19,11 +20,25 @@ public class SauceSpreadRecognizer : MonoBehaviour
         CheckSauceMotion();
     }
 
+    //TODO liquid simulation for sauce spreading
+
+    //just a function to simulate sauce adding for now
+
     public void simulateSauceMotion()
     {
         currentSauceVolume += 20f;
         Debug.Log($"Sauce spreading! Volume: {currentSauceVolume}/{sauceVolumeRequired}");
 
+    }
+
+    // hook up with actual sauce spreading detection later
+    public void registerSauceAmount(float amount)
+    {
+        if (canBeSauced)
+        {
+            currentSauceVolume += amount;
+            Debug.Log($"Sauce spreading! Volume: {currentSauceVolume}/{sauceVolumeRequired}");
+        }
     }
 
     public void CheckSauceMotion()
@@ -36,5 +51,8 @@ public class SauceSpreadRecognizer : MonoBehaviour
         }
     }
 
-
+    public void setCanBeSauced(bool val)
+    {
+        canBeSauced = val;
+    }
 }

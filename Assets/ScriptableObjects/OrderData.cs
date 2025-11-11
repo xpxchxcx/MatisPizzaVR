@@ -5,7 +5,7 @@ using System.Collections.Generic;
 public class OrderData : ScriptableObject
 {
     [Header("Order Info")]
-    public string orderId;
+    public string orderId;  //  unique runtime ID (e.g. "ORD-1023")
     public string pizzaName;
 
     [Header("Topping Requirements")]

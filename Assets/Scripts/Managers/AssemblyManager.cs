@@ -32,6 +32,9 @@ public class AssemblyManager : Singleton<AssemblyManager>
             return;
         }
 
+        // Mark order as actively being worked on once dough placed on prep surface
+        order.isInProgress = true;
+
         pizza.InitializeFromOrder(order);
         activePizzas.Add(pizza);
 

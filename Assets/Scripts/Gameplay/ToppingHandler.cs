@@ -1,91 +1,99 @@
 using UnityEngine;
 using System.Collections.Generic;
+using System;
 
 public class ToppingHandler : MonoBehaviour
 {
+    [Header("References")]
     [SerializeField] private PizzaController pizzaController;
 
-    public enum PizzaType { Margherita, Pepperoni }
-    [Header("Recipe Selection")]
+    private Dictionary<string, int> currentToppings = new();
+    private bool toppingPhaseAllowed = false;
 
-    // TODO: selected pizza to be inherited from pizza controller 
+    public void SetToppingAllowed(bool val) => toppingPhaseAllowed = val;
 
-    [SerializeField] private PizzaType selectedPizza = PizzaType.Margherita;
+    public static event Action OnToppingsCompleted;
 
-    // Recipe requirements
-    private Dictionary<PizzaType, Dictionary<string, int>> recipes = new Dictionary<PizzaType, Dictionary<string, int>>();
-
-    // Current toppings on pizza
-    private Dictionary<string, int> currentToppings = new Dictionary<string, int>();
 
     void Start()
     {
-        //TODO change this to scriptable object later
-        // Define recipes
-        recipes[PizzaType.Margherita] = new Dictionary<string, int>
-        {
-            { "cheese", 5 }
-        };
-
-        recipes[PizzaType.Pepperoni] = new Dictionary<string, int>
-        {
-            { "cheese", 5 },
-            { "pepperoni", 5 }
-        };
-
-        Debug.Log($"Selected pizza: {selectedPizza}");
+        pizzaController = GetComponentInParent<PizzaController>();
+        Debug.Log($"[ToppingHandler] Ready for toppings on: {pizzaController.pizzaName}");
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        // Check if the object is a topping (using tags)
-        if (other.CompareTag("cheese") || other.CompareTag("pepperoni"))
+        if (!toppingPhaseAllowed) return;
+
+        string toppingTag = other.tag.ToLower();
+
+        // Validate topping against recipe
+        bool validTopping = false;
+        foreach (var req in pizzaController.orderData.requiredToppings)
         {
-            string toppingType = other.tag;
-
-            // Add topping to current count
-            if (!currentToppings.ContainsKey(toppingType))
+            if (req.toppingName.ToLower() == toppingTag)
             {
-                currentToppings[toppingType] = 0;
+                validTopping = true;
+                break;
             }
-            currentToppings[toppingType]++;
-
-            Debug.Log($"Topping added: {toppingType} (Total: {currentToppings[toppingType]})");
-
-            // Check if recipe is complete
-            CheckRecipeCompletion();
         }
+
+        if (!validTopping)
+        {
+            Debug.Log($"[ToppingHandler] Ignored invalid topping: {toppingTag}");
+            return;
+        }
+
+        // Record topping
+        if (!currentToppings.ContainsKey(toppingTag))
+            currentToppings[toppingTag] = 0;
+
+        currentToppings[toppingTag]++;
+
+        Debug.Log($"[ToppingHandler] Added {toppingTag} (x{currentToppings[toppingTag]})");
+
+        CheckRecipeCompletion();
     }
 
     private void CheckRecipeCompletion()
     {
-        Dictionary<string, int> requiredToppings = recipes[selectedPizza];
+        var order = pizzaController.orderData;
+        if (order == null) return;
 
-        // Check if all required toppings are met
-        foreach (var requirement in requiredToppings)
+        foreach (var req in order.requiredToppings)
         {
-            string toppingType = requirement.Key;
-            int requiredAmount = requirement.Value;
+            string toppingName = req.toppingName.ToLower();
+            int requiredCount = req.requiredCount;
 
-            if (!currentToppings.ContainsKey(toppingType) || currentToppings[toppingType] < requiredAmount)
-            {
-                // Recipe not complete yet
-                return;
-            }
+            if (!currentToppings.ContainsKey(toppingName) || currentToppings[toppingName] < requiredCount)
+                return; // not complete yet
         }
 
-        // All requirements met!
+        // All toppings satisfied
         OnRecipeComplete();
     }
 
     private void OnRecipeComplete()
     {
-        Debug.Log($"<color=green>Recipe complete for {selectedPizza} pizza!</color>");
+        OnToppingsCompleted?.Invoke();
+        Debug.Log($"<color=green>[ToppingHandler] All toppings complete for {pizzaController.pizzaName}!</color>");
+    }
 
-        if (pizzaController != null)
+    /// <summary>
+    /// Used by UI or Oven to validate final pizza.
+    /// </summary>
+    public bool ValidateAgainstOrder()
+    {
+        var order = pizzaController.orderData;
+        if (order == null) return false;
+
+        foreach (var req in order.requiredToppings)
         {
-            // TODO: create oncomplete topping stage script function
-            //pizzaController.CompleteToppingStage();
+            string name = req.toppingName.ToLower();
+            int required = req.requiredCount;
+            if (!currentToppings.TryGetValue(name, out int have) || have < required)
+                return false;
         }
+        return true;
     }
 }
