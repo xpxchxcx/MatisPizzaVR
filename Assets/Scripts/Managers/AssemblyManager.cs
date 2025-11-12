@@ -33,7 +33,7 @@ public class AssemblyManager : Singleton<AssemblyManager>
         }
 
         // Mark order as actively being worked on once dough placed on prep surface
-        order.isInProgress = true;
+        OrderManager.Instance.MarkOrderStarted(order);
 
         pizza.InitializeFromOrder(order);
         activePizzas.Add(pizza);
@@ -63,18 +63,21 @@ public class AssemblyManager : Singleton<AssemblyManager>
         if (activePizzas.Contains(pizza))
             activePizzas.Remove(pizza);
 
-        // Validate match against active order
-        OrderData matchedOrder = OrderManager.Instance.activeOrders.Find(o => o.pizzaName == pizza.pizzaName);
 
-        if (matchedOrder != null)
-        {
-            OrderManager.Instance.MarkOrderCompleted(matchedOrder);
-            Debug.Log($"[AssemblyManager] Pizza served successfully: {pizza.pizzaName}");
-        }
-        else
-        {
-            Debug.LogWarning($"[AssemblyManager] Served pizza not matching any order: {pizza.pizzaName}");
-        }
+        //Commented out this code, since ServeZone already validates and completes order.
+
+        // Validate match against active order
+        // OrderData matchedOrder = OrderManager.Instance.activeOrders.Find(o => o.pizzaName == pizza.pizzaName);
+
+        // if (matchedOrder != null)
+        // {
+        //     OrderManager.Instance.MarkOrderCompleted(matchedOrder);
+        //     Debug.Log($"[AssemblyManager] Pizza served successfully: {pizza.pizzaName}");
+        // }
+        // else
+        // {
+        //     Debug.LogWarning($"[AssemblyManager] Served pizza not matching any order: {pizza.pizzaName}");
+        // }
     }
 
     /// <summary>
