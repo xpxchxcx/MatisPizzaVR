@@ -9,6 +9,7 @@ public class DoughController : MonoBehaviour
 
     [Header("Kneading Settings")]
     [SerializeField] private int kneadingRequired = 5;
+    public int KneadingRequired => kneadingRequired; // Public getter for tests
     private int currentKneadingCount = 0;
 
     private bool isDoughOnSurface = false;

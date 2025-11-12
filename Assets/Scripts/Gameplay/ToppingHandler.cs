@@ -14,6 +14,12 @@ public class ToppingHandler : MonoBehaviour
 
     public static event Action OnToppingsCompleted;
 
+    // Helper method for tests to trigger the event
+    public static void TriggerOnToppingsCompleted()
+    {
+        OnToppingsCompleted?.Invoke();
+    }
+
 
     void Start()
     {

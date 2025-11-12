@@ -6,6 +6,12 @@ public class PrepSurface : MonoBehaviour
     public static event Action<GameObject> OnDoughPlaced;
     public static event Action<GameObject> OnDoughRemoved;
 
+    // Helper method for tests to trigger the event
+    public static void TriggerOnDoughPlaced(GameObject dough)
+    {
+        OnDoughPlaced?.Invoke(dough);
+    }
+
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("dough"))
