@@ -22,7 +22,7 @@ public class ServeZone : MonoBehaviour
         pizza.OnServed();
 
         // Validate against the active order
-        bool success = OrderManager.Instance.ValidateOrder(pizza);
+        bool success = OrderManager.Instance.ValidatePizzaAndCompleteOrder(pizza);
 
         // Optional: handle scoring
         HandleScoring(pizza, success);
