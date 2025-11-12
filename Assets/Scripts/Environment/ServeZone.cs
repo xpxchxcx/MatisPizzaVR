@@ -6,6 +6,12 @@ public class ServeZone : MonoBehaviour
     // Move scoring to ScoreManager
     public static event Action<PizzaController, bool> OnPizzaServed;
 
+    // Helper method for tests to trigger the event
+    public static void TriggerOnPizzaServed(PizzaController pizza, bool success)
+    {
+        OnPizzaServed?.Invoke(pizza, success);
+    }
+
     private void OnTriggerEnter(Collider other)
     {
         if (!other.CompareTag("pizza")) return;

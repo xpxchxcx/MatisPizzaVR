@@ -135,7 +135,7 @@ public class OrderManager : Singleton<OrderManager>
     }
 
     // Rename for clarity
-    internal bool ValidatePizzaAndCompleteOrder(PizzaController pizza)
+    public bool ValidatePizzaAndCompleteOrder(PizzaController pizza)
     {
         if (pizza == null)
         {
