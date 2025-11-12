@@ -1,11 +1,10 @@
 using UnityEngine;
+using System;
 
 public class ServeZone : MonoBehaviour
 {
-    [Header("Scoring Settings")]
-    [SerializeField] private int baseScore = 100;
-    [SerializeField] private int penaltyBurnt = -50;
-    [SerializeField] private int penaltyWrongToppings = -25;
+    // Move scoring to ScoreManager
+    public static event Action<PizzaController, bool> OnPizzaServed;
 
     private void OnTriggerEnter(Collider other)
     {
@@ -24,30 +23,10 @@ public class ServeZone : MonoBehaviour
         // Validate against the active order
         bool success = OrderManager.Instance.ValidatePizzaAndCompleteOrder(pizza);
 
-        // Optional: handle scoring
-        HandleScoring(pizza, success);
+        // Fire pizza served event. Currently listened to by ScoreManager.
+        OnPizzaServed?.Invoke(pizza, success);
 
         // Cleanup
         AssemblyManager.Instance.CompletePizza(pizza);
-    }
-
-    private void HandleScoring(PizzaController pizza, bool success)
-    {
-        int score = baseScore;
-
-        if (!success)
-        {
-            if (pizza.isBurnt)
-                score += penaltyBurnt;
-            else
-                score += penaltyWrongToppings;
-        }
-
-        Debug.Log($"[ServeZone] Pizza '{pizza.pizzaName}' served. " +
-                  $"Cooked: {pizza.isCooked}, Burnt: {pizza.isBurnt}, Valid: {success}. " +
-                  $"Score: {score}");
-
-        // TODO: send score to ScoreManager if you have one:
-        // ScoreManager.Instance.AddScore(score);
     }
 }
