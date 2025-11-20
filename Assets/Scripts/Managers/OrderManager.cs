@@ -1,6 +1,8 @@
 using UnityEngine;
 using System.Collections.Generic;
 using System;
+using TMPro;
+using System.Linq;
 
 public class OrderManager : Singleton<OrderManager>
 {
@@ -28,17 +30,33 @@ public class OrderManager : Singleton<OrderManager>
 
     public event Action<OrderData> OnOrderSpawned;
     public event Action<OrderData> OnOrderCompleted;
+    public TextMeshPro activeTMP;
+    public TextMeshPro startedTMP;
+
 
 
     private float nextSpawnTime;
 
     void Start()
     {
-        ScheduleNextOrder();
+        SpawnRandomOrder();
+    }
+
+    public void DebugUI()
+    {
+        activeTMP.text = activeOrders.Count == 0
+  ? "No active orders."
+  : string.Join("\n", activeOrders.Select(o => $"{o.orderId} - {o.pizzaName}"));
+
+        startedTMP.text = startedOrders.Count == 0
+            ? "No started orders."
+            : string.Join("\n", startedOrders.Select(o => $"{o.orderId} - {o.pizzaName}"));
     }
 
     void Update()
     {
+        DebugUI();
+
         // Wait for the randomized next spawn time
         if (Time.time >= nextSpawnTime && (activeOrders.Count + startedOrders.Count) < maxActiveOrders)
         {
@@ -121,6 +139,7 @@ public class OrderManager : Singleton<OrderManager>
         order.isInProgress = true; // Mark as started. Already called from Assembly manager, but adding it here just in case.
         activeOrders.Remove(order);
         startedOrders.Add(order);
+        Debug.Log($"[OrderManager] mark order started: {startedOrders}");
     }
 
     /// <summary>

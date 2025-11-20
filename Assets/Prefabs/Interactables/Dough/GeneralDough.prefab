@@ -1,0 +1,159 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &3694203598717082019
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7767185204316794390}
+  - component: {fileID: 8050338034704095967}
+  m_Layer: 0
+  m_Name: GeneralDough
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7767185204316794390
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3694203598717082019}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.798, y: 0.505, z: 0.695}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 6359719897480343686}
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &8050338034704095967
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3694203598717082019}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 56571252c609b4f9da24f3162d12302d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Scripts::PizzaController
+  pizzaName: 
+  orderData: {fileID: 0}
+  assemblyPhase: 0
+  bakeState: 0
+  isSauced: 0
+  isCooked: 0
+  isBurnt: 0
+  isServed: 0
+  doughController: {fileID: 2711711249044473802}
+  flattenedDoughPrefab: {fileID: 4691751272639028863, guid: ab7be5c54bf0dfd409b18a19d1ee3a29, type: 3}
+--- !u!1001 &6841254746133184122
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 7767185204316794390}
+    m_Modifications:
+    - target: {fileID: 482808186205998844, guid: dd7836425f7254f86b979903ad1b02d9, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 482808186205998844, guid: dd7836425f7254f86b979903ad1b02d9, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 482808186205998844, guid: dd7836425f7254f86b979903ad1b02d9, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 482808186205998844, guid: dd7836425f7254f86b979903ad1b02d9, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 482808186205998844, guid: dd7836425f7254f86b979903ad1b02d9, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 482808186205998844, guid: dd7836425f7254f86b979903ad1b02d9, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 482808186205998844, guid: dd7836425f7254f86b979903ad1b02d9, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 482808186205998844, guid: dd7836425f7254f86b979903ad1b02d9, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0.00000003774895
+      objectReference: {fileID: 0}
+    - target: {fileID: 482808186205998844, guid: dd7836425f7254f86b979903ad1b02d9, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 482808186205998844, guid: dd7836425f7254f86b979903ad1b02d9, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 482808186205998844, guid: dd7836425f7254f86b979903ad1b02d9, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 482808186205998844, guid: dd7836425f7254f86b979903ad1b02d9, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 482808186205998844, guid: dd7836425f7254f86b979903ad1b02d9, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1006721437865989190, guid: dd7836425f7254f86b979903ad1b02d9, type: 3}
+      propertyPath: m_Name
+      value: Unflattened_Dough
+      objectReference: {fileID: 0}
+    - target: {fileID: 1006721437865989190, guid: dd7836425f7254f86b979903ad1b02d9, type: 3}
+      propertyPath: m_TagString
+      value: dough
+      objectReference: {fileID: 0}
+    - target: {fileID: 6662638105475711992, guid: dd7836425f7254f86b979903ad1b02d9, type: 3}
+      propertyPath: m_Size.y
+      value: 0.005
+      objectReference: {fileID: 0}
+    - target: {fileID: 6662638105475711992, guid: dd7836425f7254f86b979903ad1b02d9, type: 3}
+      propertyPath: m_Center.y
+      value: 0.001
+      objectReference: {fileID: 0}
+    - target: {fileID: 8885861491388135856, guid: dd7836425f7254f86b979903ad1b02d9, type: 3}
+      propertyPath: pizzaController
+      value: 
+      objectReference: {fileID: 0}
+    m_RemovedComponents:
+    - {fileID: -7907468759203520948, guid: dd7836425f7254f86b979903ad1b02d9, type: 3}
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: dd7836425f7254f86b979903ad1b02d9, type: 3}
+--- !u!114 &2711711249044473802 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8885861491388135856, guid: dd7836425f7254f86b979903ad1b02d9, type: 3}
+  m_PrefabInstance: {fileID: 6841254746133184122}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dc47c1f87dd2a49d1949f483697ccd1d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Scripts::DoughController
+--- !u!4 &6359719897480343686 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 482808186205998844, guid: dd7836425f7254f86b979903ad1b02d9, type: 3}
+  m_PrefabInstance: {fileID: 6841254746133184122}
+  m_PrefabAsset: {fileID: 0}

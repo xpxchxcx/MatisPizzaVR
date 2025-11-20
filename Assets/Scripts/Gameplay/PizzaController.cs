@@ -21,17 +21,29 @@ public class PizzaController : MonoBehaviour
 
     private float bakeTimer = 0f;
 
+
+    public DoughController doughController;
+
+    public GameObject flattenedDoughPrefab;
+
+
+    void Start()
+    {
+        doughController.GetComponentInChildren<DoughController>();
+    }
+
     private void OnEnable()
     {
+        doughController.GetComponentInChildren<DoughController>();
         SauceSpreadRecognizer.OnSauceComplete += OnSauceCompleted;
-        DoughController.OnDoughFlattened += OnDoughFlattened;
+        doughController.OnDoughFlattened += OnDoughFlattened;
         ToppingHandler.OnToppingsCompleted += OnToppingsCompleted;
     }
 
     private void OnDisable()
     {
         SauceSpreadRecognizer.OnSauceComplete -= OnSauceCompleted;
-        DoughController.OnDoughFlattened -= OnDoughFlattened;
+        doughController.OnDoughFlattened -= OnDoughFlattened;
         ToppingHandler.OnToppingsCompleted -= OnToppingsCompleted;
 
     }
@@ -56,9 +68,10 @@ public class PizzaController : MonoBehaviour
         Debug.Log($"[PizzaController] Initialized pizza for order: {pizzaName}");
     }
 
-    public void OnDoughFlattened()
+    public void OnDoughFlattened(GameObject go)
     {
-        assemblyPhase = AssemblyPhase.SauceStage;
+        AssemblyManager.Instance.AdvanceAssemblyPhase(go.GetComponent<PizzaController>(), AssemblyPhase.SauceStage);
+        UpdateGameObjToFlattened();
         Debug.Log($"[PizzaController] {pizzaName} flattened, moving to Sauce Stage.");
     }
 
@@ -171,5 +184,40 @@ public class PizzaController : MonoBehaviour
 
         Debug.Log($"[PizzaController] {pizzaName} validated successfully!");
         return true;
+    }
+
+    public void UpdateGameObjToFlattened()
+    {
+        // Disable child
+        Transform disableChild = transform.Find("Unflattened_Dough");
+        if (disableChild != null)
+            disableChild.gameObject.SetActive(false);
+        SpawnFlattenedDough();
+
+
+    }
+
+
+    public void SpawnFlattenedDough()
+    {
+        // Save transforms
+        Transform dough = doughController.transform;
+
+        Transform parent = dough.parent;              // keep same parent
+        Vector3 pos = dough.localPosition;            // keep dough’s position relative to parent
+        Quaternion rot = dough.localRotation;         // keep dough’s rotation
+
+
+        pos.y += 0.02f;
+
+        // Instantiate new flattened dough under the SAME parent
+        GameObject flat = Instantiate(flattenedDoughPrefab, parent);
+
+        // Restore pos/rot relative to parent
+        flat.transform.localPosition = pos;
+        flat.transform.localRotation = rot;
+
+
+        Debug.Log("[DoughController] Spawned flattened dough under same parent.");
     }
 }

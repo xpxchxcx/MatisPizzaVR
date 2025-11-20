@@ -1,11 +1,15 @@
 using UnityEngine;
 using System.Collections.Generic;
 using System;
+using TMPro;
 
 public class ToppingHandler : MonoBehaviour
 {
     [Header("References")]
     [SerializeField] private PizzaController pizzaController;
+    [Header("Debug UI")]
+    public TextMeshPro tmp;
+
 
     private Dictionary<string, int> currentToppings = new();
     private bool toppingPhaseAllowed = false;
@@ -23,7 +27,10 @@ public class ToppingHandler : MonoBehaviour
 
     void Start()
     {
+        tmp = GameManager.Instance.toppingsDebugUI.GetComponent<TextMeshPro>();
         pizzaController = GetComponentInParent<PizzaController>();
+        UpdateDebugText();
+
         Debug.Log($"[ToppingHandler] Ready for toppings on: {pizzaController.pizzaName}");
     }
 
@@ -58,6 +65,7 @@ public class ToppingHandler : MonoBehaviour
 
         Debug.Log($"[ToppingHandler] Added {toppingTag} (x{currentToppings[toppingTag]})");
 
+        UpdateDebugText();
         CheckRecipeCompletion();
     }
 
@@ -77,12 +85,14 @@ public class ToppingHandler : MonoBehaviour
 
         // All toppings satisfied
         OnRecipeComplete();
+
     }
 
     private void OnRecipeComplete()
     {
         OnToppingsCompleted?.Invoke();
         Debug.Log($"<color=green>[ToppingHandler] All toppings complete for {pizzaController.pizzaName}!</color>");
+        UpdateDebugText();
     }
 
     /// <summary>
@@ -101,5 +111,23 @@ public class ToppingHandler : MonoBehaviour
                 return false;
         }
         return true;
+    }
+
+    private void UpdateDebugText()
+    {
+        if (tmp == null || pizzaController == null || pizzaController.orderData == null)
+            return;
+
+        string debugText = $"Pizza: {pizzaController.pizzaName}\nTopping Phase: {(toppingPhaseAllowed ? "Active" : "Inactive")}\n\nRequired Toppings:\n";
+
+        foreach (var req in pizzaController.orderData.requiredToppings)
+        {
+            string name = req.toppingName;
+            int required = req.requiredCount;
+            int added = currentToppings.ContainsKey(name.ToLower()) ? currentToppings[name.ToLower()] : 0;
+            debugText += $"- {name}: {added}/{required}\n";
+        }
+
+        tmp.text = debugText;
     }
 }

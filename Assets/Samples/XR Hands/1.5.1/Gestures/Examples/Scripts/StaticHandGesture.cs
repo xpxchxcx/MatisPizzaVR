@@ -9,6 +9,8 @@ namespace UnityEngine.XR.Hands.Samples.GestureSample
     /// </summary>
     public class StaticHandGesture : MonoBehaviour
     {
+        public bool IsPerforming { get; private set; } = false;
+
         [SerializeField]
         [Tooltip("The hand tracking events component to subscribe to receive updated joint data to be used for gesture detection.")]
         XRHandTrackingEvents m_HandTrackingEvents;
@@ -160,6 +162,7 @@ namespace UnityEngine.XR.Hands.Samples.GestureSample
             else if (m_WasDetected && !detected)
             {
                 m_PerformedTriggered = false;
+                IsPerforming = false;
                 m_GestureEnded?.Invoke();
                 m_Background.color = m_BackgroundDefaultColor;
             }
@@ -173,6 +176,7 @@ namespace UnityEngine.XR.Hands.Samples.GestureSample
                 {
                     m_GesturePerformed?.Invoke();
                     m_PerformedTriggered = true;
+                    IsPerforming = true;
                     m_Background.color = m_BackgroundHiglightColor;
                 }
             }

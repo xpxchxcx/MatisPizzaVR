@@ -161,6 +161,73 @@ MonoBehaviour:
         Min: 1
         Max: 1
   _resetScaleResponsivenessOnConstraintOvershoot: 0
+--- !u!1 &9141685531127027969
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2090241447218857012}
+  - component: {fileID: 6662638105475711992}
+  - component: {fileID: 8193104302492071863}
+  m_Layer: 0
+  m_Name: KneadSpace
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2090241447218857012
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9141685531127027969}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0.000535, z: 0}
+  m_LocalScale: {x: 0.19839478, y: 0.19839478, z: 0.19839478}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 482808186205998844}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &6662638105475711992
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9141685531127027969}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.01, y: 0.01, z: 0.01}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &8193104302492071863
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9141685531127027969}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 027e06d8257da254f9c2cc7290d3f197, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: '::'
+  doughController: {fileID: 8885861491388135856}
 --- !u!1001 &88380951176472855
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -229,12 +296,19 @@ PrefabInstance:
       propertyPath: m_Name
       value: Unflattened_Dough
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 8ccfdefa7e56842baa6f28946af39c91, type: 3}
+      propertyPath: m_TagString
+      value: dough
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects:
     - targetCorrespondingSourceObject: {fileID: -8679921383154817045, guid: 8ccfdefa7e56842baa6f28946af39c91, type: 3}
       insertIndex: -1
       addedObject: {fileID: 9123712881111462340}
+    - targetCorrespondingSourceObject: {fileID: -8679921383154817045, guid: 8ccfdefa7e56842baa6f28946af39c91, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2090241447218857012}
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 8ccfdefa7e56842baa6f28946af39c91, type: 3}
       insertIndex: -1
@@ -248,6 +322,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 8ccfdefa7e56842baa6f28946af39c91, type: 3}
       insertIndex: -1
       addedObject: {fileID: -7907468759203520948}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 8ccfdefa7e56842baa6f28946af39c91, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 8885861491388135856}
   m_SourcePrefab: {fileID: 100100000, guid: 8ccfdefa7e56842baa6f28946af39c91, type: 3}
 --- !u!4 &482808186205998844 stripped
 Transform:
@@ -342,3 +419,27 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 56571252c609b4f9da24f3162d12302d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PizzaController
+  pizzaName: 
+  orderData: {fileID: 0}
+  assemblyPhase: 0
+  bakeState: 0
+  isSauced: 0
+  isCooked: 0
+  isBurnt: 0
+  isServed: 0
+--- !u!114 &8885861491388135856
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1006721437865989190}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dc47c1f87dd2a49d1949f483697ccd1d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Scripts::DoughController
+  pizzaController: {fileID: -7907468759203520948}
+  kneadingRequired: 5
+  kneadZone: {fileID: 0}
+  tmp: {fileID: 0}
