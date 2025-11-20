@@ -5,41 +5,26 @@ using UnityEngine.InputSystem;
 public class SauceSpreadRecognizer : MonoBehaviour
 {
     public static event Action OnSauceComplete;
-    [SerializeField] private float sauceVolumeRequired = 100f;
-    public float SauceVolumeRequired => sauceVolumeRequired; // Public getter for tests
-    private float currentSauceVolume = 0f;
-    private bool canBeSauced = false;
-    private bool sauceCompleted = false; // Prevent multiple event fires
+    [SerializeField] private int sauceVolumeRequired = 3;
+    public float SauceVolumeRequired => sauceVolumeRequired;
+    private int currentSauceVolume = 0;
 
+    private bool canBeSauced = false;
+    private bool sauceCompleted = false;
     void Update()
     {
-        // Debug: S key to simulate sauce spreading
-        if (Keyboard.current != null && Keyboard.current[Key.S].wasPressedThisFrame)
-        {
-            simulateSauceMotion();
-        }
 
         CheckSauceMotion();
     }
 
-    //TODO liquid simulation for sauce spreading
 
-    //just a function to simulate sauce adding for now
-
-    public void simulateSauceMotion()
-    {
-        currentSauceVolume += 20f;
-        Debug.Log($"Sauce spreading! Volume: {currentSauceVolume}/{sauceVolumeRequired}");
-
-    }
-
-    // hook up with actual sauce spreading detection later
-    public void registerSauceAmount(float amount)
+    public void registerSauceAmount()
     {
         if (canBeSauced)
         {
-            currentSauceVolume += amount;
+            currentSauceVolume += 1;
             Debug.Log($"Sauce spreading! Volume: {currentSauceVolume}/{sauceVolumeRequired}");
+
         }
     }
 
@@ -57,10 +42,22 @@ public class SauceSpreadRecognizer : MonoBehaviour
     public void setCanBeSauced(bool val)
     {
         canBeSauced = val;
-        // Reset sauce completion flag when pizza leaves sauce surface (allows re-saucing)
-        if (!val)
+
+    }
+
+
+    void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("ladle"))
         {
-            sauceCompleted = false;
+            Transform grandParent = other.transform.parent.parent;
+            Ladle ladle = grandParent.gameObject.GetComponent<Ladle>();
+            if (ladle.hasSauce)
+            {
+                registerSauceAmount();
+                ladle.ToggleSoup();
+            }
+
         }
     }
 }

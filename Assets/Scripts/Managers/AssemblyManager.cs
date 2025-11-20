@@ -17,6 +17,9 @@ public class AssemblyManager : Singleton<AssemblyManager>
     public static event Action EndKneadRightGestureEvent;
     public static event Action EndKneadLeftGestureEvent;
 
+    //helpers
+
+
 
     private void OnEnable()
     {
