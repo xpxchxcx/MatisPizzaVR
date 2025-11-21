@@ -108,12 +108,12 @@ GameObject:
   - component: {fileID: 3460791379470942450}
   - component: {fileID: 867669329456308650}
   - component: {fileID: 9055437039043244373}
-  - component: {fileID: 495679545095177068}
   - component: {fileID: 2440538564349380947}
   - component: {fileID: 4778151481328702578}
+  - component: {fileID: 9092521971973840081}
   m_Layer: 0
   m_Name: Mushroom
-  m_TagString: Untagged
+  m_TagString: mushroom
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -191,28 +191,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!64 &495679545095177068
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1458860408907440251}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 5
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: -5495902117074765545, guid: 2bbbacacd11cee74c9191141008e27ae, type: 3}
 --- !u!54 &2440538564349380947
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -262,3 +240,24 @@ MonoBehaviour:
   _rigidbody: {fileID: 2440538564349380947}
   _kinematicWhileSelected: 1
   _throwWhenUnselected: 1
+--- !u!65 &9092521971973840081
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1458860408907440251}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1.3891597, y: 2, z: 2.0559115}
+  m_Center: {x: 0.30542025, y: 0, z: 0.03288189}

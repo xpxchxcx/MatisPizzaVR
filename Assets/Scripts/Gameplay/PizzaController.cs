@@ -110,7 +110,8 @@ public class PizzaController : MonoBehaviour
 
     public void OnToppingsCompleted()
     {
-        assemblyPhase = AssemblyPhase.ReadyForOven;
+
+        AssemblyManager.Instance.AdvanceAssemblyPhase(GetComponent<PizzaController>(), AssemblyPhase.ReadyForOven);
         Debug.Log($"[PizzaController] {pizzaName} ready for oven!");
     }
 
@@ -210,6 +211,12 @@ public class PizzaController : MonoBehaviour
         SpawnSaucedFlattenedDough();
     }
 
+    public void UpdateGameObjToCooked()
+    {
+        if (saucedDoughInstance != null)
+            saucedDoughInstance.SetActive(false);
+    }
+
 
     public void SpawnFlattenedDough()
     {
@@ -257,6 +264,8 @@ public class PizzaController : MonoBehaviour
         sauced.transform.localPosition = pos;
         sauced.transform.localRotation = rot;
 
+        HookToppingUI(saucedDoughInstance);
+
         Debug.Log("[PizzaController] Spawned sauced dough at CURRENT flattened dough position.");
     }
 
@@ -280,5 +289,19 @@ public class PizzaController : MonoBehaviour
             flattenedDough.transform.Find("UI/SauceProgressText")?.GetComponent<TextMeshPro>();
 
         Debug.Log("[PizzaController] Attached SauceSpreadRecognizer to flattened dough.");
+    }
+
+    private void HookToppingUI(GameObject sauceDough)
+    {
+        ToppingHandler handler = sauceDough.GetComponentInChildren<ToppingHandler>();
+        if (handler == null) return;
+
+        handler.toppingsHeader =
+            sauceDough.transform.Find("UI/ToppingsHeaderText")?.GetComponent<TextMeshPro>();
+
+        handler.toppingsProgress =
+            sauceDough.transform.Find("UI/ToppingsProgressText")?.GetComponent<TextMeshPro>();
+
+        Debug.Log("[PizzaController] Linked topping UI to pizza dough.");
     }
 }

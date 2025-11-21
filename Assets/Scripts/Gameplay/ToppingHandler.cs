@@ -5,18 +5,33 @@ using TMPro;
 
 public class ToppingHandler : MonoBehaviour
 {
+    public static event Action OnToppingsCompleted;
     [Header("References")]
     [SerializeField] private PizzaController pizzaController;
     [Header("Debug UI")]
-    public TextMeshPro tmp;
+
+
+    [Header("UI")]
+    public TextMeshPro toppingsHeader;
+    public TextMeshPro toppingsProgress;
 
 
     private Dictionary<string, int> currentToppings = new();
+    [SerializeField] private List<GameObject> nonGrabbableToppingPrefabs;
     private bool toppingPhaseAllowed = false;
 
-    public void SetToppingAllowed(bool val) => toppingPhaseAllowed = val;
+    public float pizzaRadius = 0.5f;
+    public float yOffset = 0.02f;
 
-    public static event Action OnToppingsCompleted;
+    public void SetToppingAllowed(bool val)
+    {
+        toppingPhaseAllowed = val;
+        Debug.Log($"Topping phase allowed: {toppingPhaseAllowed}");
+        UpdateDebugText();
+    }
+
+
+
 
     // Helper method for tests to trigger the event
     public static void TriggerOnToppingsCompleted()
@@ -27,7 +42,7 @@ public class ToppingHandler : MonoBehaviour
 
     void Start()
     {
-        tmp = GameManager.Instance.toppingsDebugUI.GetComponent<TextMeshPro>();
+
         pizzaController = GetComponentInParent<PizzaController>();
         UpdateDebugText();
 
@@ -39,6 +54,7 @@ public class ToppingHandler : MonoBehaviour
         if (!toppingPhaseAllowed) return;
 
         string toppingTag = other.tag.ToLower();
+        Debug.Log($"[ToppingHandler] Got unverified topping tag: {toppingTag}");
 
         // Validate topping against recipe
         bool validTopping = false;
@@ -57,11 +73,9 @@ public class ToppingHandler : MonoBehaviour
             return;
         }
 
-        // Record topping
-        if (!currentToppings.ContainsKey(toppingTag))
-            currentToppings[toppingTag] = 0;
+        AttachTopping(other.gameObject);
 
-        currentToppings[toppingTag]++;
+
 
         Debug.Log($"[ToppingHandler] Added {toppingTag} (x{currentToppings[toppingTag]})");
 
@@ -113,21 +127,68 @@ public class ToppingHandler : MonoBehaviour
         return true;
     }
 
+
+
     private void UpdateDebugText()
     {
-        if (tmp == null || pizzaController == null || pizzaController.orderData == null)
+        if (toppingsHeader == null || toppingsProgress == null || pizzaController.orderData == null)
             return;
 
-        string debugText = $"Pizza: {pizzaController.pizzaName}\nTopping Phase: {(toppingPhaseAllowed ? "Active" : "Inactive")}\n\nRequired Toppings:\n";
+        toppingsHeader.text = toppingPhaseAllowed
+            ? "Toppings: ACTIVE"
+            : "Toppings: Inactive";
+
+        string progress = "";
+        progress = pizzaController.pizzaName + "\n";
+
 
         foreach (var req in pizzaController.orderData.requiredToppings)
         {
-            string name = req.toppingName;
+            string name = req.toppingName.ToLower();
             int required = req.requiredCount;
-            int added = currentToppings.ContainsKey(name.ToLower()) ? currentToppings[name.ToLower()] : 0;
-            debugText += $"- {name}: {added}/{required}\n";
+            int added = currentToppings.TryGetValue(name, out int have) ? have : 0;
+
+            progress += $"{name}: {added}/{required}\n";
         }
 
-        tmp.text = debugText;
+        toppingsProgress.text = progress;
+    }
+
+    private void AttachTopping(GameObject topping)
+    {
+        Debug.Log($"[ToppingHandler] attaching topping");
+        string toppingTag = topping.tag.ToLower();
+        Debug.Log($"[ToppingHandler] topping tag {toppingTag}");
+
+        GameObject prefab = nonGrabbableToppingPrefabs.Find(p => p.tag.ToLower() == toppingTag);
+        if (prefab == null)
+        {
+            Debug.LogWarning($"[ToppingHandler] No non-grabbable prefab found for topping {toppingTag}");
+            return;
+        }
+
+        // 1. Instantiate as a child of the pizza
+        GameObject newTopping = Instantiate(prefab, pizzaController.saucedDoughInstance.transform);
+
+        // 2. Reset local position and rotation
+        newTopping.transform.localPosition = Vector3.zero; // Start at pizza center
+        newTopping.transform.localRotation = Quaternion.identity;
+        newTopping.transform.localScale = prefab.transform.localScale;
+
+        // 3. Random offset slightly above the pizza
+        Vector2 randomOffset = UnityEngine.Random.insideUnitCircle * pizzaRadius;
+        newTopping.transform.localPosition = new Vector3(randomOffset.x, yOffset, randomOffset.y);
+
+        // 4. Destroy original grabbable topping
+        Destroy(topping);
+
+        Debug.Log($"[ToppingHandler] Replaced {toppingTag} with non-grabbable topping on pizza.");
+
+        // 5. Record topping in dictionary
+        if (!currentToppings.ContainsKey(toppingTag))
+            currentToppings[toppingTag] = 0;
+
+        currentToppings[toppingTag]++;
+        UpdateDebugText();
     }
 }
