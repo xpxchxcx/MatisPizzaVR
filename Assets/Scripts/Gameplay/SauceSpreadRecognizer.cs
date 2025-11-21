@@ -1,58 +1,85 @@
 using System;
+using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 public class SauceSpreadRecognizer : MonoBehaviour
 {
-    public static event Action OnSauceComplete;
-    [SerializeField] private float sauceVolumeRequired = 100f;
-    private float currentSauceVolume = 0f;
-    private bool canBeSauced = false;
+    public static event Action<GameObject> OnSauceComplete;
+    [SerializeField] private int sauceVolumeRequired = 3;
+    public float SauceVolumeRequired => sauceVolumeRequired;
+    private int currentSauceVolume = 0;
 
+    private bool canBeSauced = false;
+    private bool sauceCompleted = false;
+
+
+    [Header("UI")]
+    public TextMeshPro sauceStatusText;
+    public TextMeshPro sauceProgressText;
     void Update()
     {
-        // Debug: S key to simulate sauce spreading
-        if (Keyboard.current != null && Keyboard.current[Key.S].wasPressedThisFrame)
-        {
-            simulateSauceMotion();
-        }
 
         CheckSauceMotion();
+        UpdateUI();
     }
 
-    //TODO liquid simulation for sauce spreading
-
-    //just a function to simulate sauce adding for now
-
-    public void simulateSauceMotion()
+    private void UpdateUI()
     {
-        currentSauceVolume += 20f;
-        Debug.Log($"Sauce spreading! Volume: {currentSauceVolume}/{sauceVolumeRequired}");
+        if (sauceStatusText != null)
+            sauceStatusText.text = canBeSauced ? "Ready for Sauce" : "Not Ready";
 
+        if (sauceProgressText != null)
+            sauceProgressText.text =
+                $"Sauce: {currentSauceVolume}/{sauceVolumeRequired}";
     }
 
-    // hook up with actual sauce spreading detection later
-    public void registerSauceAmount(float amount)
+    public void registerSauceAmount()
     {
         if (canBeSauced)
         {
-            currentSauceVolume += amount;
+            currentSauceVolume += 1;
             Debug.Log($"Sauce spreading! Volume: {currentSauceVolume}/{sauceVolumeRequired}");
+            UpdateUI();
         }
     }
 
     public void CheckSauceMotion()
     {
         // put sauce motion detection logic here (e.g., hand tracking data)
-        if (currentSauceVolume >= sauceVolumeRequired)
+        if (!sauceCompleted && currentSauceVolume >= sauceVolumeRequired)
         {
+            sauceCompleted = true;
             Debug.Log("<color=green>Sauce spreading complete!</color>");
-            OnSauceComplete?.Invoke();
+            OnSauceComplete?.Invoke(transform.parent.parent.gameObject);
         }
     }
 
     public void setCanBeSauced(bool val)
     {
         canBeSauced = val;
+
+    }
+
+
+    void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("ladle"))
+        {
+            Debug.Log("Ladle sauced on flattened pizza ");
+            Transform grandParent = other.transform.parent.parent;
+            Ladle ladle = grandParent.gameObject.GetComponent<Ladle>();
+            if (ladle.hasSauce)
+            {
+                registerSauceAmount();
+                ladle.ToggleSoup();
+            }
+
+        }
+    }
+
+    public int GetRemainingSauceNeeded()
+    {
+        return Mathf.Max(sauceVolumeRequired - currentSauceVolume, 0);
     }
 }

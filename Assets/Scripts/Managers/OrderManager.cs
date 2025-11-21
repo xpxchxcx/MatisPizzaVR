@@ -1,6 +1,8 @@
 using UnityEngine;
 using System.Collections.Generic;
 using System;
+using TMPro;
+using System.Linq;
 
 public class OrderManager : Singleton<OrderManager>
 {
@@ -9,7 +11,8 @@ public class OrderManager : Singleton<OrderManager>
     public OrderLibrary orderLibrary;
 
     [Header("Runtime Lists")]
-    public List<OrderData> activeOrders = new();      // currently active orders in progress
+    public List<OrderData> activeOrders = new();      // currently active orders
+    public List<OrderData> startedOrders = new(); // orders that have been started but not yet completed
     public List<OrderData> completedOrders = new();   // finished or delivered orders
 
     [Header("Order Timing Settings")]
@@ -27,19 +30,35 @@ public class OrderManager : Singleton<OrderManager>
 
     public event Action<OrderData> OnOrderSpawned;
     public event Action<OrderData> OnOrderCompleted;
+    public TextMeshPro activeTMP;
+    public TextMeshPro startedTMP;
+
 
 
     private float nextSpawnTime;
 
     void Start()
     {
-        ScheduleNextOrder();
+        SpawnRandomOrder();
+    }
+
+    public void DebugUI()
+    {
+        activeTMP.text = activeOrders.Count == 0
+  ? "No active orders."
+  : string.Join("\n", activeOrders.Select(o => $"{o.orderId} - {o.pizzaName}"));
+
+        startedTMP.text = startedOrders.Count == 0
+            ? "No started orders."
+            : string.Join("\n", startedOrders.Select(o => $"{o.orderId} - {o.pizzaName}"));
     }
 
     void Update()
     {
+        DebugUI();
+
         // Wait for the randomized next spawn time
-        if (Time.time >= nextSpawnTime && activeOrders.Count < maxActiveOrders)
+        if (Time.time >= nextSpawnTime && (activeOrders.Count + startedOrders.Count) < maxActiveOrders)
         {
             SpawnRandomOrder();
             ScheduleNextOrder(); // new random delay for the next one
@@ -85,15 +104,15 @@ public class OrderManager : Singleton<OrderManager>
     }
 
     /// <summary>
-    /// Marks an order as completed, moves it to completed list, and removes it from active.
+    /// Marks an order as completed, moves it to completed list, and removes it from started.
     /// </summary>
     public void MarkOrderCompleted(OrderData order)
     {
-        if (order == null || !activeOrders.Contains(order)) return;
+        if (order == null || !startedOrders.Contains(order)) return;
 
         order.isInProgress = false;
         order.isCompleted = true;
-        activeOrders.Remove(order);
+        startedOrders.Remove(order);
         completedOrders.Add(order);
 
         Debug.Log($"[OrderManager] Completed order: {order.pizzaName}");
@@ -112,16 +131,30 @@ public class OrderManager : Singleton<OrderManager>
     }
 
     /// <summary>
+    /// Marks an order as started, adds it to started list, and removes it from active.
+    /// </summary>
+    public void MarkOrderStarted(OrderData order)
+    {
+        if (order == null || !activeOrders.Contains(order)) return;
+        order.isInProgress = true; // Mark as started. Already called from Assembly manager, but adding it here just in case.
+        activeOrders.Remove(order);
+        startedOrders.Add(order);
+        Debug.Log($"[OrderManager] mark order started: {startedOrders}");
+    }
+
+    /// <summary>
     /// Clears all orders — useful for restarting a round or debugging.
     /// </summary>
     public void ClearAllOrders()
     {
         activeOrders.Clear();
+        startedOrders.Clear();
         completedOrders.Clear();
         Debug.Log("[OrderManager] Cleared all orders.");
     }
 
-    internal bool ValidateOrder(PizzaController pizza)
+    // Rename for clarity
+    public bool ValidatePizzaAndCompleteOrder(PizzaController pizza)
     {
         if (pizza == null)
         {
@@ -129,16 +162,24 @@ public class OrderManager : Singleton<OrderManager>
             return false;
         }
 
-        if (activeOrders == null || activeOrders.Count == 0)
+        if (startedOrders == null || startedOrders.Count == 0)
         {
             Debug.LogWarning("[OrderManager] No active orders to validate against!");
             return false;
         }
 
-        OrderData matchedOrder = activeOrders.Find(o => o.pizzaName == pizza.pizzaName);
+        if (pizza.orderData == null)
+        {
+            Debug.LogWarning("[OrderManager] Pizza has no order data!");
+            return false;
+        }
+
+        // Use the order ID instead of the pizza name to match the order
+        // In case the pizza name is not unique, like when there are multiple pizzas of the same type
+        OrderData matchedOrder = startedOrders.Find(o => o.orderId == pizza.orderData.orderId);
         if (matchedOrder == null)
         {
-            Debug.LogWarning($"[OrderManager] No matching active order found for pizza: {pizza.pizzaName}");
+            Debug.LogWarning($"[OrderManager] No matching active order found for pizza: {pizza.orderData.orderId}");
             return false;
         }
 

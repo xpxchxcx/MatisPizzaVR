@@ -8,14 +8,14 @@ public class ToppingSurface : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("dough"))
+        if (other.CompareTag("sauced"))
         {
             GameObject go = other.gameObject;
-            PizzaController currentPizzaController = go.GetComponent<PizzaController>();
+            PizzaController currentPizzaController = go.transform.parent.GetComponent<PizzaController>();
 
             if (currentPizzaController != null && currentPizzaController.assemblyPhase == AssemblyPhase.ToppingsStage)
             {
-                go.GetComponent<ToppingHandler>().SetToppingAllowed(true);
+                go.GetComponentInChildren<ToppingHandler>().SetToppingAllowed(true);
                 Debug.Log($"sauced Dough entered topping prep surface: {other.gameObject.name}");
             }
 
@@ -23,13 +23,13 @@ public class ToppingSurface : MonoBehaviour
     }
     private void OnTriggerExit(Collider other)
     {
-        if (other.CompareTag("dough"))
+        if (other.CompareTag("sauced"))
         {
             GameObject go = other.gameObject;
-            PizzaController currentPizzaController = go.GetComponent<PizzaController>();
+            PizzaController currentPizzaController = go.transform.parent.GetComponent<PizzaController>();
 
 
-            go.GetComponent<ToppingHandler>().SetToppingAllowed(false);
+            go.GetComponentInChildren<ToppingHandler>().SetToppingAllowed(false);
             Debug.Log($"flattened Dough exited topping prep surface: {other.gameObject.name}");
 
 

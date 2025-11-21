@@ -1,0 +1,116 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &1142784837239310252
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2054119486711696897}
+  m_Layer: 0
+  m_Name: Capsicum
+  m_TagString: capsicum
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2054119486711696897
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1142784837239310252}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 2669589686842298287}
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1001 &1353264451610957300
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 2054119486711696897}
+    m_Modifications:
+    - target: {fileID: 4020460424186518107, guid: 527ddb879843c2a46b83bf502f9abbce, type: 3}
+      propertyPath: m_LocalScale.x
+      value: -0.013619999
+      objectReference: {fileID: 0}
+    - target: {fileID: 4020460424186518107, guid: 527ddb879843c2a46b83bf502f9abbce, type: 3}
+      propertyPath: m_LocalScale.y
+      value: -0.00108
+      objectReference: {fileID: 0}
+    - target: {fileID: 4020460424186518107, guid: 527ddb879843c2a46b83bf502f9abbce, type: 3}
+      propertyPath: m_LocalScale.z
+      value: -0.013619999
+      objectReference: {fileID: 0}
+    - target: {fileID: 4020460424186518107, guid: 527ddb879843c2a46b83bf502f9abbce, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4020460424186518107, guid: 527ddb879843c2a46b83bf502f9abbce, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4020460424186518107, guid: 527ddb879843c2a46b83bf502f9abbce, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4020460424186518107, guid: 527ddb879843c2a46b83bf502f9abbce, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: -0.42627692
+      objectReference: {fileID: 0}
+    - target: {fileID: 4020460424186518107, guid: 527ddb879843c2a46b83bf502f9abbce, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0.0000004172325
+      objectReference: {fileID: 0}
+    - target: {fileID: 4020460424186518107, guid: 527ddb879843c2a46b83bf502f9abbce, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0.90459275
+      objectReference: {fileID: 0}
+    - target: {fileID: 4020460424186518107, guid: 527ddb879843c2a46b83bf502f9abbce, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0.0000004172325
+      objectReference: {fileID: 0}
+    - target: {fileID: 4020460424186518107, guid: 527ddb879843c2a46b83bf502f9abbce, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 50.463
+      objectReference: {fileID: 0}
+    - target: {fileID: 4020460424186518107, guid: 527ddb879843c2a46b83bf502f9abbce, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: -90
+      objectReference: {fileID: 0}
+    - target: {fileID: 4020460424186518107, guid: 527ddb879843c2a46b83bf502f9abbce, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: -90
+      objectReference: {fileID: 0}
+    - target: {fileID: 5084029696208416912, guid: 527ddb879843c2a46b83bf502f9abbce, type: 3}
+      propertyPath: m_Name
+      value: Capsicum (19)
+      objectReference: {fileID: 0}
+    - target: {fileID: 5084029696208416912, guid: 527ddb879843c2a46b83bf502f9abbce, type: 3}
+      propertyPath: m_TagString
+      value: capsicum
+      objectReference: {fileID: 0}
+    m_RemovedComponents:
+    - {fileID: 1524292751695898770, guid: 527ddb879843c2a46b83bf502f9abbce, type: 3}
+    - {fileID: 2524474860602837259, guid: 527ddb879843c2a46b83bf502f9abbce, type: 3}
+    - {fileID: 1766298828514873319, guid: 527ddb879843c2a46b83bf502f9abbce, type: 3}
+    m_RemovedGameObjects:
+    - {fileID: 1070024663941335410, guid: 527ddb879843c2a46b83bf502f9abbce, type: 3}
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 527ddb879843c2a46b83bf502f9abbce, type: 3}
+--- !u!4 &2669589686842298287 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4020460424186518107, guid: 527ddb879843c2a46b83bf502f9abbce, type: 3}
+  m_PrefabInstance: {fileID: 1353264451610957300}
+  m_PrefabAsset: {fileID: 0}

@@ -1,16 +1,32 @@
 using UnityEngine;
 using System.Collections.Generic;
+using UnityEngine.Events;
+using System;
+using TMPro;
+using System.Linq;
 
 public class AssemblyManager : Singleton<AssemblyManager>
 {
     [Header("Active Pizzas")]
     public List<PizzaController> activePizzas = new();
+    public TextMeshPro tmp;
+
+    public static event Action StartKneadRightGestureEvent;
+    public static event Action StartKneadLeftGestureEvent;
+
+    public static event Action EndKneadRightGestureEvent;
+    public static event Action EndKneadLeftGestureEvent;
+
+    //helpers
+
+
 
     private void OnEnable()
     {
         // Subscribe to PrepSurface or DoughController events if you want auto-registration
         PrepSurface.OnDoughPlaced += HandleDoughPlaced;
         PrepSurface.OnDoughRemoved += HandleDoughRemoved;
+        tmp.text = "";
     }
 
     private void OnDisable()
@@ -18,6 +34,12 @@ public class AssemblyManager : Singleton<AssemblyManager>
         // Always unsubscribe to prevent leaks
         PrepSurface.OnDoughPlaced -= HandleDoughPlaced;
         PrepSurface.OnDoughRemoved -= HandleDoughRemoved;
+    }
+
+    void Start()
+    {
+        PrepSurface.OnDoughPlaced += HandleDoughPlaced;
+        PrepSurface.OnDoughRemoved += HandleDoughRemoved;
     }
 
     /// <summary>
@@ -33,12 +55,14 @@ public class AssemblyManager : Singleton<AssemblyManager>
         }
 
         // Mark order as actively being worked on once dough placed on prep surface
-        order.isInProgress = true;
+        OrderManager.Instance.MarkOrderStarted(order);
 
         pizza.InitializeFromOrder(order);
         activePizzas.Add(pizza);
-
+        UpdatePizzaListDisplay();
         Debug.Log($"[AssemblyManager] Registered pizza '{pizza.pizzaName}' for order: {order.pizzaName}");
+
+
     }
 
     /// <summary>
@@ -50,6 +74,7 @@ public class AssemblyManager : Singleton<AssemblyManager>
         {
             activePizzas.Remove(pizza);
             Debug.Log($"[AssemblyManager] Unregistered pizza: {pizza.pizzaName}");
+            UpdatePizzaListDisplay();
         }
     }
 
@@ -63,43 +88,46 @@ public class AssemblyManager : Singleton<AssemblyManager>
         if (activePizzas.Contains(pizza))
             activePizzas.Remove(pizza);
 
-        // Validate match against active order
-        OrderData matchedOrder = OrderManager.Instance.activeOrders.Find(o => o.pizzaName == pizza.pizzaName);
 
-        if (matchedOrder != null)
-        {
-            OrderManager.Instance.MarkOrderCompleted(matchedOrder);
-            Debug.Log($"[AssemblyManager] Pizza served successfully: {pizza.pizzaName}");
-        }
-        else
-        {
-            Debug.LogWarning($"[AssemblyManager] Served pizza not matching any order: {pizza.pizzaName}");
-        }
+        //Commented out this code, since ServeZone already validates and completes order.
+
+        // Validate match against active order
+        // OrderData matchedOrder = OrderManager.Instance.activeOrders.Find(o => o.pizzaName == pizza.pizzaName);
+
+        // if (matchedOrder != null)
+        // {
+        //     OrderManager.Instance.MarkOrderCompleted(matchedOrder);
+        //     Debug.Log($"[AssemblyManager] Pizza served successfully: {pizza.pizzaName}");
+        // }
+        // else
+        // {
+        //     Debug.LogWarning($"[AssemblyManager] Served pizza not matching any order: {pizza.pizzaName}");
+        // }
     }
 
     /// <summary>
     /// Progresses a pizza through its assembly stages.
     /// </summary>
-    public void AdvanceAssemblyPhase(PizzaController pizza)
+    public void AdvanceAssemblyPhase(PizzaController pizza, AssemblyPhase nextPhase)
     {
         if (pizza == null) return;
 
-        switch (pizza.assemblyPhase)
+        switch (nextPhase)
         {
             case AssemblyPhase.None:
                 pizza.assemblyPhase = AssemblyPhase.Kneading;
                 break;
             case AssemblyPhase.Kneading:
-                pizza.assemblyPhase = AssemblyPhase.SauceStage;
+                pizza.assemblyPhase = AssemblyPhase.Kneading;
                 break;
             case AssemblyPhase.SauceStage:
-                pizza.assemblyPhase = AssemblyPhase.ToppingsStage;
+                pizza.assemblyPhase = AssemblyPhase.SauceStage;
                 break;
             case AssemblyPhase.ToppingsStage:
-                pizza.assemblyPhase = AssemblyPhase.ReadyForOven;
+                pizza.assemblyPhase = AssemblyPhase.ToppingsStage;
                 break;
             case AssemblyPhase.ReadyForOven:
-                pizza.assemblyPhase = AssemblyPhase.Baking;
+                pizza.assemblyPhase = AssemblyPhase.ReadyForOven;
                 break;
             case AssemblyPhase.Baking:
                 pizza.assemblyPhase = AssemblyPhase.Baked;
@@ -111,6 +139,7 @@ public class AssemblyManager : Singleton<AssemblyManager>
         }
 
         Debug.Log($"[AssemblyManager] {pizza.pizzaName} advanced to phase: {pizza.assemblyPhase}");
+        UpdatePizzaListDisplay();
     }
 
     // Optional event hooks if you're using PrepSurface events
@@ -121,6 +150,8 @@ public class AssemblyManager : Singleton<AssemblyManager>
         // basically just auto-assign the next order to this pizza (simplicity sake)
         OrderData nextOrder = OrderManager.Instance.GetNextPendingOrder();
         if (nextOrder != null)
+            // currently no orders
+
             RegisterPizza(pizza, nextOrder);
         else
             Debug.Log("[AssemblyManager] No pending order to assign.");
@@ -130,4 +161,44 @@ public class AssemblyManager : Singleton<AssemblyManager>
     {
         // do nothing for now
     }
+
+    private void UpdatePizzaListDisplay()
+    {
+        if (activePizzas.Count == 0)
+        {
+            tmp.text = "No active pizzas.";
+            return;
+        }
+
+        tmp.text = string.Join("\n",
+            activePizzas.Select(p => $"{p.pizzaName}  |  Phase: {p.assemblyPhase}")
+        );
+    }
+
+
+    #region Right Hand Knead
+    public void StartRightKneadGesture()
+    {
+        StartKneadRightGestureEvent.Invoke();
+    }
+
+    public void EndRightKneadGesture()
+    {
+        EndKneadRightGestureEvent.Invoke();
+    }
+    #endregion
+
+    #region Left Hand Knead
+    public void StartLeftKneadGesture()
+    {
+        StartKneadLeftGestureEvent.Invoke();
+
+    }
+
+    public void EndLeftKneadGesture()
+    {
+        EndKneadLeftGestureEvent.Invoke();
+
+    }
+    #endregion
 }
