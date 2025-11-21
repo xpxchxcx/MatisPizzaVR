@@ -1,22 +1,38 @@
 using System;
+using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 public class SauceSpreadRecognizer : MonoBehaviour
 {
-    public static event Action OnSauceComplete;
+    public static event Action<GameObject> OnSauceComplete;
     [SerializeField] private int sauceVolumeRequired = 3;
     public float SauceVolumeRequired => sauceVolumeRequired;
     private int currentSauceVolume = 0;
 
     private bool canBeSauced = false;
     private bool sauceCompleted = false;
+
+
+    [Header("UI")]
+    public TextMeshPro sauceStatusText;
+    public TextMeshPro sauceProgressText;
     void Update()
     {
 
         CheckSauceMotion();
+        UpdateUI();
     }
 
+    private void UpdateUI()
+    {
+        if (sauceStatusText != null)
+            sauceStatusText.text = canBeSauced ? "Ready for Sauce" : "Not Ready";
+
+        if (sauceProgressText != null)
+            sauceProgressText.text =
+                $"Sauce: {currentSauceVolume}/{sauceVolumeRequired}";
+    }
 
     public void registerSauceAmount()
     {
@@ -24,7 +40,7 @@ public class SauceSpreadRecognizer : MonoBehaviour
         {
             currentSauceVolume += 1;
             Debug.Log($"Sauce spreading! Volume: {currentSauceVolume}/{sauceVolumeRequired}");
-
+            UpdateUI();
         }
     }
 
@@ -35,7 +51,7 @@ public class SauceSpreadRecognizer : MonoBehaviour
         {
             sauceCompleted = true;
             Debug.Log("<color=green>Sauce spreading complete!</color>");
-            OnSauceComplete?.Invoke();
+            OnSauceComplete?.Invoke(transform.parent.parent.gameObject);
         }
     }
 
@@ -50,6 +66,7 @@ public class SauceSpreadRecognizer : MonoBehaviour
     {
         if (other.CompareTag("ladle"))
         {
+            Debug.Log("Ladle sauced on flattened pizza ");
             Transform grandParent = other.transform.parent.parent;
             Ladle ladle = grandParent.gameObject.GetComponent<Ladle>();
             if (ladle.hasSauce)
@@ -59,5 +76,10 @@ public class SauceSpreadRecognizer : MonoBehaviour
             }
 
         }
+    }
+
+    public int GetRemainingSauceNeeded()
+    {
+        return Mathf.Max(sauceVolumeRequired - currentSauceVolume, 0);
     }
 }

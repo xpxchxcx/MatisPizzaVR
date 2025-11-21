@@ -20,7 +20,7 @@ public class SauceSurface : MonoBehaviour
 
             if (currentPizzaController != null && currentPizzaController.assemblyPhase == AssemblyPhase.SauceStage)
             {
-                SauceSpreadRecognizer sauceSpreadRecognizer = go.transform.parent.Find("SauceSpreadRecognizer").GetComponent<SauceSpreadRecognizer>();
+                SauceSpreadRecognizer sauceSpreadRecognizer = go.GetComponentInChildren<SauceSpreadRecognizer>();
                 sauceSpreadRecognizer.setCanBeSauced(true);
                 Debug.Log($"flattened Dough entered saucing prep surface: {other.gameObject.name}");
                 UpdateDebugUI(currentPizzaController, "entered");
@@ -34,7 +34,7 @@ public class SauceSurface : MonoBehaviour
         if (other.CompareTag("flattened"))
         {
             GameObject go = other.gameObject;
-            SauceSpreadRecognizer sauceSpreadRecognizer = go.transform.parent.Find("SauceSpreadRecognizer").GetComponent<SauceSpreadRecognizer>();
+            SauceSpreadRecognizer sauceSpreadRecognizer = go.GetComponentInChildren<SauceSpreadRecognizer>();
 
             sauceSpreadRecognizer.setCanBeSauced(false);
             PizzaController currentPizzaController = go.transform.parent.GetComponent<PizzaController>();

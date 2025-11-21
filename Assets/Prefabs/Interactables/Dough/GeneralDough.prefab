@@ -46,6 +46,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Scripts::SauceSpreadRecognizer
   sauceVolumeRequired: 3
+  sauceStatusText: {fileID: 0}
+  sauceProgressText: {fileID: 0}
 --- !u!65 &9041574659578557966
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -123,6 +125,8 @@ MonoBehaviour:
   isServed: 0
   doughController: {fileID: 2711711249044473802}
   flattenedDoughPrefab: {fileID: 4691751272639028863, guid: ab7be5c54bf0dfd409b18a19d1ee3a29, type: 3}
+  SaucedflattenedDoughPrefab: {fileID: 4595471012208120283, guid: cb8e19c863e88924a96c2a360e8c0032, type: 3}
+  sauceSpreadRecognizerPrefab: {fileID: 7686915199147176947, guid: 7569395041876bf49a7ad563b66c94da, type: 3}
 --- !u!1001 &6841254746133184122
 PrefabInstance:
   m_ObjectHideFlags: 0

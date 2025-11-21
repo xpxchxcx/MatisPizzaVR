@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections.Generic;
 using System;
+using TMPro;
 
 public class PizzaController : MonoBehaviour
 {
@@ -25,6 +26,11 @@ public class PizzaController : MonoBehaviour
     public DoughController doughController;
 
     public GameObject flattenedDoughPrefab;
+    public GameObject SaucedflattenedDoughPrefab;
+    public GameObject sauceSpreadRecognizerPrefab;
+
+    public GameObject flattenedDoughInstance;
+    public GameObject saucedDoughInstance;
 
 
     void Start()
@@ -75,10 +81,11 @@ public class PizzaController : MonoBehaviour
         Debug.Log($"[PizzaController] {pizzaName} flattened, moving to Sauce Stage.");
     }
 
-    public void OnSauceCompleted()
+    public void OnSauceCompleted(GameObject go)
     {
         isSauced = true;
-        assemblyPhase = AssemblyPhase.ToppingsStage;
+        AssemblyManager.Instance.AdvanceAssemblyPhase(go.GetComponent<PizzaController>(), AssemblyPhase.ToppingsStage);
+        UpdateGameObjToSauced();
         Debug.Log($"[PizzaController] {pizzaName} sauce completed, moving to Toppings Stage.");
     }
 
@@ -193,8 +200,14 @@ public class PizzaController : MonoBehaviour
         if (disableChild != null)
             disableChild.gameObject.SetActive(false);
         SpawnFlattenedDough();
+    }
 
+    public void UpdateGameObjToSauced()
+    {
 
+        if (flattenedDoughInstance != null)
+            flattenedDoughInstance.SetActive(false);
+        SpawnSaucedFlattenedDough();
     }
 
 
@@ -212,12 +225,60 @@ public class PizzaController : MonoBehaviour
 
         // Instantiate new flattened dough under the SAME parent
         GameObject flat = Instantiate(flattenedDoughPrefab, parent);
-
+        flattenedDoughInstance = flat;
         // Restore pos/rot relative to parent
         flat.transform.localPosition = pos;
         flat.transform.localRotation = rot;
 
 
         Debug.Log("[DoughController] Spawned flattened dough under same parent.");
+
+        SpawnSauceSpreadRecognizerComponent(flat);
+    }
+
+    public void SpawnSaucedFlattenedDough()
+    {
+        if (flattenedDoughInstance == null)
+        {
+            Debug.LogError("[PizzaController] Tried to spawn sauced dough but no flattened dough exists!");
+            return;
+        }
+
+        Transform flat = flattenedDoughInstance.transform;
+
+        Transform parent = flat.parent;
+        Vector3 pos = flat.localPosition;
+        Quaternion rot = flat.localRotation;
+
+        // Instantiate sauced dough at the SAME spot
+        GameObject sauced = Instantiate(SaucedflattenedDoughPrefab, parent);
+        saucedDoughInstance = sauced;
+
+        sauced.transform.localPosition = pos;
+        sauced.transform.localRotation = rot;
+
+        Debug.Log("[PizzaController] Spawned sauced dough at CURRENT flattened dough position.");
+    }
+
+    public void SpawnSauceSpreadRecognizerComponent(GameObject flattenedDough)
+    {
+        if (sauceSpreadRecognizerPrefab == null)
+        {
+            Debug.LogError("[PizzaController] No SauceSpreadRecognizer prefab assigned!");
+            return;
+        }
+
+        GameObject recognizer = Instantiate(sauceSpreadRecognizerPrefab, flattenedDough.transform);
+        recognizer.transform.localPosition = Vector3.zero;
+        recognizer.transform.localRotation = Quaternion.identity;
+
+        SauceSpreadRecognizer sauceSpreadRecognizer = recognizer.GetComponent<SauceSpreadRecognizer>();
+        sauceSpreadRecognizer.sauceStatusText =
+     flattenedDough.transform.Find("UI/SauceStatusText")?.GetComponent<TextMeshPro>();
+
+        sauceSpreadRecognizer.sauceProgressText =
+            flattenedDough.transform.Find("UI/SauceProgressText")?.GetComponent<TextMeshPro>();
+
+        Debug.Log("[PizzaController] Attached SauceSpreadRecognizer to flattened dough.");
     }
 }
