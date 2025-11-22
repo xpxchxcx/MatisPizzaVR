@@ -130,9 +130,12 @@ public class AssemblyManager : Singleton<AssemblyManager>
                 pizza.assemblyPhase = AssemblyPhase.ReadyForOven;
                 break;
             case AssemblyPhase.Baking:
-                pizza.assemblyPhase = AssemblyPhase.Baked;
+                pizza.assemblyPhase = AssemblyPhase.Baking;
                 break;
             case AssemblyPhase.Baked:
+                pizza.assemblyPhase = AssemblyPhase.Baked;
+                break;
+            case AssemblyPhase.Served:
                 pizza.assemblyPhase = AssemblyPhase.Served;
                 CompletePizza(pizza);
                 break;

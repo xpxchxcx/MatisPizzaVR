@@ -153,20 +153,20 @@ public class GameplayLoopIntegrationTest
         Assert.AreEqual(AssemblyPhase.ReadyForOven, pizzaController.assemblyPhase, "Pizza should be ready for oven");
 
         // 6. Start baking
-        pizzaController.StartBaking();
+        //pizzaController.StartBaking();
         Assert.AreEqual(AssemblyPhase.Baking, pizzaController.assemblyPhase, "Pizza should be in Baking phase");
 
         // 7. Complete baking (use actual values from OvenController)
         GameObject ovenGO = new GameObject("TestOven");
         OvenController ovenController = ovenGO.AddComponent<OvenController>();
         float bakeTime = ovenController.bakeTime;
-        float burnTime = ovenController.bakeTime + ovenController.burnGraceTime;
+        float burnTime = ovenController.bakeTime + ovenController.burnTime;
         float elapsed = 0f;
         float fixedDelta = 0.1f; // Use fixed delta for predictable timing
 
         while (pizzaController.assemblyPhase == AssemblyPhase.Baking && elapsed < bakeTime + 1f)
         {
-            pizzaController.UpdateBaking(fixedDelta, bakeTime, burnTime);
+            //pizzaController.UpdateBaking(fixedDelta, bakeTime, burnTime);
             elapsed += fixedDelta;
             yield return null;
         }
@@ -239,13 +239,13 @@ public class GameplayLoopIntegrationTest
         yield return null;
 
         // Start baking
-        pizzaController.StartBaking();
+        //pizzaController.StartBaking();
 
         // Over-bake pizza (beyond burn time - use actual values from OvenController)
         GameObject ovenGO = new GameObject("TestOven");
         OvenController ovenController = ovenGO.AddComponent<OvenController>();
         float bakeTime = ovenController.bakeTime;
-        float burnTime = ovenController.bakeTime + ovenController.burnGraceTime;
+        float burnTime = ovenController.bakeTime + ovenController.burnTime;
         float elapsed = 0f;
         float fixedDelta = 0.1f; // Use fixed delta for more predictable timing
 
@@ -260,7 +260,7 @@ public class GameplayLoopIntegrationTest
                 pizzaController.assemblyPhase = AssemblyPhase.Baking;
             }
             // Use reversed values: burnTime < bakeTime so burn check happens first
-            pizzaController.UpdateBaking(fixedDelta, burnTime + 1f, burnTime);
+            //pizzaController.UpdateBaking(fixedDelta, burnTime + 1f, burnTime);
             elapsed += fixedDelta;
             yield return null;
         }
@@ -321,17 +321,17 @@ public class GameplayLoopIntegrationTest
         yield return null;
 
         // Complete baking (use actual values from OvenController)
-        pizzaController.StartBaking();
+        //pizzaController.StartBaking();
         GameObject ovenGO = new GameObject("TestOven");
         OvenController ovenController = ovenGO.AddComponent<OvenController>();
         float bakeTime = ovenController.bakeTime;
-        float burnTime = ovenController.bakeTime + ovenController.burnGraceTime;
+        float burnTime = ovenController.bakeTime + ovenController.burnTime;
         float elapsed = 0f;
         float fixedDelta = 0.1f; // Use fixed delta for predictable timing
 
         while (pizzaController.assemblyPhase == AssemblyPhase.Baking && elapsed < bakeTime + 1f)
         {
-            pizzaController.UpdateBaking(fixedDelta, bakeTime, burnTime);
+            //pizzaController.UpdateBaking(fixedDelta, bakeTime, burnTime);
             elapsed += fixedDelta;
             yield return null;
         }

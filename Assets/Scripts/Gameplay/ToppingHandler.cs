@@ -106,7 +106,8 @@ public class ToppingHandler : MonoBehaviour
     {
         OnToppingsCompleted?.Invoke();
         Debug.Log($"<color=green>[ToppingHandler] All toppings complete for {pizzaController.pizzaName}!</color>");
-        UpdateDebugText();
+        toppingsHeader.text = "";
+        toppingsProgress.text = "";
     }
 
     /// <summary>

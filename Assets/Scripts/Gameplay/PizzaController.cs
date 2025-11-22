@@ -1,6 +1,5 @@
 using UnityEngine;
 using System.Collections.Generic;
-using System;
 using TMPro;
 
 public class PizzaController : MonoBehaviour
@@ -20,8 +19,14 @@ public class PizzaController : MonoBehaviour
     public bool isBurnt = false;
     public bool isServed = false;
 
-    private float bakeTimer = 0f;
+    [Header("Baking")]
+    public bool isInsideOven = false;
+    public float bakeTimer = 0f;
+    public float bakeTime;
+    public float burnTime;
 
+    public PizzaBakedPrefabs pizzaBakePrefabs;
+    private GameObject finalPizzaInstance; // store the currently spawned cooked/burnt pizza
 
     public DoughController doughController;
 
@@ -32,15 +37,16 @@ public class PizzaController : MonoBehaviour
     public GameObject flattenedDoughInstance;
     public GameObject saucedDoughInstance;
 
+    public TextMeshPro tempDebug;
 
     void Start()
     {
-        doughController.GetComponentInChildren<DoughController>();
+        bakeTime = OvenController.Instance.bakeTime;
+        burnTime = OvenController.Instance.burnTime;
     }
 
     private void OnEnable()
     {
-        doughController.GetComponentInChildren<DoughController>();
         SauceSpreadRecognizer.OnSauceComplete += OnSauceCompleted;
         doughController.OnDoughFlattened += OnDoughFlattened;
         ToppingHandler.OnToppingsCompleted += OnToppingsCompleted;
@@ -51,12 +57,104 @@ public class PizzaController : MonoBehaviour
         SauceSpreadRecognizer.OnSauceComplete -= OnSauceCompleted;
         doughController.OnDoughFlattened -= OnDoughFlattened;
         ToppingHandler.OnToppingsCompleted -= OnToppingsCompleted;
-
     }
 
-    /// <summary>
-    /// Initialize the pizza from a given order.
-    /// </summary>
+    void Update()
+    {
+        tempDebug.text = $"Is inside oven: {isInsideOven} bakeTimer:{bakeTimer}/{bakeTime} \n State: {bakeState} is not cooked  and {bakeTimer} >= {bakeTime} is {bakeTimer >= bakeTime && bakeState != BakeState.Cooked} \n assemblyphase: {assemblyPhase}";
+
+        if (isInsideOven)
+        {
+            bakeTimer += Time.deltaTime;
+
+            float cookedThreshold = bakeTime;
+            float burntThreshold = bakeTime + burnTime;
+
+            if (bakeTimer >= burntThreshold && bakeState != BakeState.Burnt)
+            {
+                bakeState = BakeState.Burnt;
+                isCooked = false;
+                isBurnt = true;
+                SpawnFinalPizza(true);
+                Debug.Log("[Pizza] Burnt inside oven.");
+            }
+            else if (bakeTimer >= cookedThreshold && bakeState != BakeState.Cooked)
+            {
+                bakeState = BakeState.Cooked;
+                isCooked = true;
+                isBurnt = false;
+                if (assemblyPhase != AssemblyPhase.Baked)
+                {
+                    OnBaked();
+                }
+                SpawnFinalPizza(false);
+                Debug.Log("[Pizza] Finished cooking inside oven.");
+            }
+        }
+    }
+
+    // --- Oven interaction methods ---
+    public void EnterOven(Transform ovenPoint)
+    {
+
+        //saucedDoughInstance.transform.position = ovenPoint.position;
+        if (assemblyPhase != AssemblyPhase.ReadyForOven)
+        {
+            Debug.LogWarning("[Pizza] Not ready for oven.");
+            return;
+        }
+
+        isInsideOven = true;
+        Debug.Log($"[Pizza] EnterOven called: {isInsideOven}");
+        bakeTimer = 0f;
+        bakeState = BakeState.Raw;
+        isCooked = false;
+        isBurnt = false;
+
+        OnBaking();
+        Debug.Log("[Pizza] Entered oven, baking started.");
+    }
+
+    public void ExitOven()
+    {
+        isInsideOven = false;
+        Debug.Log($"[Pizza] ExitOven called: {isInsideOven}");
+
+        FinalizeBaking();
+        Debug.Log("[Pizza] Exited oven.");
+    }
+
+    private void FinalizeBaking()
+    {
+        float cookedThreshold = bakeTime;
+        float burntThreshold = bakeTime + burnTime;
+
+        if (bakeTimer < cookedThreshold)
+        {
+            bakeState = BakeState.Raw;
+            isCooked = false;
+            isBurnt = false;
+            Debug.Log("[Pizza] Removed early → RAW.");
+        }
+        else if (bakeTimer < burntThreshold)
+        {
+            bakeState = BakeState.Cooked;
+            isCooked = true;
+            isBurnt = false;
+            if (finalPizzaInstance == null) SpawnFinalPizza(false);
+            Debug.Log("[Pizza] Cooked correctly when removed.");
+        }
+        else
+        {
+            bakeState = BakeState.Burnt;
+            isCooked = false;
+            isBurnt = true;
+            if (finalPizzaInstance == null) SpawnFinalPizza(true);
+            Debug.Log("[Pizza] Burnt when removed.");
+        }
+    }
+
+    // --- Existing methods for dough, sauce, toppings ---
     public void InitializeFromOrder(OrderData order)
     {
         orderData = order;
@@ -88,10 +186,22 @@ public class PizzaController : MonoBehaviour
         UpdateGameObjToSauced();
         Debug.Log($"[PizzaController] {pizzaName} sauce completed, moving to Toppings Stage.");
     }
+    public void OnBaked()
+    {
 
-    /// <summary>
-    /// Adds a topping to this pizza (tracks count).
-    /// </summary>
+        AssemblyManager.Instance.AdvanceAssemblyPhase(GetComponent<PizzaController>(), AssemblyPhase.Baked);
+
+        Debug.Log($"[PizzaController] {pizzaName} is baked, please serve!.");
+    }
+
+    public void OnBaking()
+    {
+
+        AssemblyManager.Instance.AdvanceAssemblyPhase(GetComponent<PizzaController>(), AssemblyPhase.Baking);
+
+        Debug.Log($"[PizzaController] {pizzaName} is baking, please wait!.");
+    }
+
     public void AddTopping(string toppingName)
     {
         if (assemblyPhase != AssemblyPhase.ToppingsStage)
@@ -110,53 +220,8 @@ public class PizzaController : MonoBehaviour
 
     public void OnToppingsCompleted()
     {
-
         AssemblyManager.Instance.AdvanceAssemblyPhase(GetComponent<PizzaController>(), AssemblyPhase.ReadyForOven);
         Debug.Log($"[PizzaController] {pizzaName} ready for oven!");
-    }
-
-    public void OnBaked()
-    {
-        assemblyPhase = AssemblyPhase.Baked;
-    }
-
-    public void StartBaking()
-    {
-        if (assemblyPhase != AssemblyPhase.ReadyForOven)
-        {
-            Debug.LogWarning("[PizzaController] Pizza not ready for oven yet!");
-            return;
-        }
-
-        assemblyPhase = AssemblyPhase.Baking;
-        bakeState = BakeState.Baking;
-        bakeTimer = 0f;
-
-        Debug.Log($"[PizzaController] {pizzaName} started baking.");
-    }
-
-    public void UpdateBaking(float deltaTime, float bakeTime, float burnTime)
-    {
-        if (assemblyPhase != AssemblyPhase.Baking)
-            return;
-
-        bakeTimer += deltaTime;
-
-        if (bakeTimer >= burnTime)
-        {
-            bakeState = BakeState.Burnt;
-            isBurnt = true;
-            isCooked = false;
-            Debug.Log($"[PizzaController] {pizzaName} burnt!");
-        }
-        else if (bakeTimer >= bakeTime)
-        {
-            bakeState = BakeState.Cooked;
-            isCooked = true;
-            isBurnt = false;
-            assemblyPhase = AssemblyPhase.Baked;
-            Debug.Log($"[PizzaController] {pizzaName} cooked!");
-        }
     }
 
     public void OnServed()
@@ -166,9 +231,6 @@ public class PizzaController : MonoBehaviour
         Debug.Log($"[PizzaController] {pizzaName} served!");
     }
 
-    /// <summary>
-    /// Checks whether pizza meets order topping requirements.
-    /// </summary>
     public bool ValidateAgainstOrder()
     {
         if (orderData == null) return false;
@@ -196,7 +258,6 @@ public class PizzaController : MonoBehaviour
 
     public void UpdateGameObjToFlattened()
     {
-        // Disable child
         Transform disableChild = transform.Find("Unflattened_Dough");
         if (disableChild != null)
             disableChild.gameObject.SetActive(false);
@@ -205,7 +266,6 @@ public class PizzaController : MonoBehaviour
 
     public void UpdateGameObjToSauced()
     {
-
         if (flattenedDoughInstance != null)
             flattenedDoughInstance.SetActive(false);
         SpawnSaucedFlattenedDough();
@@ -217,28 +277,18 @@ public class PizzaController : MonoBehaviour
             saucedDoughInstance.SetActive(false);
     }
 
-
     public void SpawnFlattenedDough()
     {
-        // Save transforms
         Transform dough = doughController.transform;
-
-        Transform parent = dough.parent;              // keep same parent
-        Vector3 pos = dough.localPosition;            // keep dough’s position relative to parent
-        Quaternion rot = dough.localRotation;         // keep dough’s rotation
-
-
+        Transform parent = dough.parent;
+        Vector3 pos = dough.localPosition;
+        Quaternion rot = dough.localRotation;
         pos.y += 0.02f;
 
-        // Instantiate new flattened dough under the SAME parent
         GameObject flat = Instantiate(flattenedDoughPrefab, parent);
         flattenedDoughInstance = flat;
-        // Restore pos/rot relative to parent
         flat.transform.localPosition = pos;
         flat.transform.localRotation = rot;
-
-
-        Debug.Log("[DoughController] Spawned flattened dough under same parent.");
 
         SpawnSauceSpreadRecognizerComponent(flat);
     }
@@ -252,21 +302,16 @@ public class PizzaController : MonoBehaviour
         }
 
         Transform flat = flattenedDoughInstance.transform;
-
         Transform parent = flat.parent;
         Vector3 pos = flat.localPosition;
         Quaternion rot = flat.localRotation;
 
-        // Instantiate sauced dough at the SAME spot
         GameObject sauced = Instantiate(SaucedflattenedDoughPrefab, parent);
         saucedDoughInstance = sauced;
-
         sauced.transform.localPosition = pos;
         sauced.transform.localRotation = rot;
 
         HookToppingUI(saucedDoughInstance);
-
-        Debug.Log("[PizzaController] Spawned sauced dough at CURRENT flattened dough position.");
     }
 
     public void SpawnSauceSpreadRecognizerComponent(GameObject flattenedDough)
@@ -283,12 +328,9 @@ public class PizzaController : MonoBehaviour
 
         SauceSpreadRecognizer sauceSpreadRecognizer = recognizer.GetComponent<SauceSpreadRecognizer>();
         sauceSpreadRecognizer.sauceStatusText =
-     flattenedDough.transform.Find("UI/SauceStatusText")?.GetComponent<TextMeshPro>();
-
+            flattenedDough.transform.Find("UI/SauceStatusText")?.GetComponent<TextMeshPro>();
         sauceSpreadRecognizer.sauceProgressText =
             flattenedDough.transform.Find("UI/SauceProgressText")?.GetComponent<TextMeshPro>();
-
-        Debug.Log("[PizzaController] Attached SauceSpreadRecognizer to flattened dough.");
     }
 
     private void HookToppingUI(GameObject sauceDough)
@@ -298,10 +340,44 @@ public class PizzaController : MonoBehaviour
 
         handler.toppingsHeader =
             sauceDough.transform.Find("UI/ToppingsHeaderText")?.GetComponent<TextMeshPro>();
-
         handler.toppingsProgress =
             sauceDough.transform.Find("UI/ToppingsProgressText")?.GetComponent<TextMeshPro>();
+    }
 
-        Debug.Log("[PizzaController] Linked topping UI to pizza dough.");
+    public void SpawnFinalPizza(bool burned)
+    {
+        Vector3 spawnPos;
+        Quaternion spawnRot;
+
+        if (finalPizzaInstance != null)
+        {
+            spawnPos = finalPizzaInstance.transform.position;
+            spawnRot = finalPizzaInstance.transform.rotation;
+            Destroy(finalPizzaInstance);
+        }
+        else if (saucedDoughInstance != null)
+        {
+            spawnPos = saucedDoughInstance.transform.position;
+            spawnRot = saucedDoughInstance.transform.rotation;
+            Destroy(saucedDoughInstance);
+        }
+        else
+        {
+            spawnPos = transform.position;
+            spawnRot = transform.rotation;
+        }
+
+        GameObject prefabToSpawn = burned
+            ? pizzaBakePrefabs.GetBurntPrefab()
+            : pizzaBakePrefabs.GetCookedPrefab(pizzaName);
+
+        if (prefabToSpawn == null)
+        {
+            Debug.LogError($"[PizzaController] No prefab found for '{pizzaName}', burned={burned}");
+            return;
+        }
+
+        finalPizzaInstance = Instantiate(prefabToSpawn, spawnPos, spawnRot, transform);
+        Debug.Log($"[Pizza] Spawned {(burned ? "burnt" : "cooked")} pizza at correct position.");
     }
 }

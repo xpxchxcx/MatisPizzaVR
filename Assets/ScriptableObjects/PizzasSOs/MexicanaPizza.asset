@@ -15,7 +15,7 @@ MonoBehaviour:
   orderId: 005
   pizzaName: Mexicana
   requiredToppings:
-  - toppingName: black olives
+  - toppingName: black olive
     requiredCount: 9
   - toppingName: mozzarella
     requiredCount: 6
