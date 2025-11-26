@@ -146,7 +146,7 @@ public class GameplayLoopIntegrationTest
         pizzaController.AddTopping("cheese");
 
         // Trigger toppings completed event
-        ToppingHandler.TriggerOnToppingsCompleted();
+        //ToppingHandler.TriggerOnToppingsCompleted();
         yield return null;
 
         // Verify ready for oven
@@ -235,7 +235,7 @@ public class GameplayLoopIntegrationTest
         pizzaController.AddTopping("pepperoni");
         pizzaController.AddTopping("cheese");
         pizzaController.AddTopping("cheese");
-        ToppingHandler.TriggerOnToppingsCompleted();
+        //ToppingHandler.TriggerOnToppingsCompleted();
         yield return null;
 
         // Start baking
@@ -317,7 +317,7 @@ public class GameplayLoopIntegrationTest
         pizzaController.AddTopping("mushroom");
         pizzaController.AddTopping("mushroom");
         pizzaController.AddTopping("mushroom");
-        ToppingHandler.TriggerOnToppingsCompleted();
+        //ToppingHandler.TriggerOnToppingsCompleted();
         yield return null;
 
         // Complete baking (use actual values from OvenController)

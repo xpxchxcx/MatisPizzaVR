@@ -30,6 +30,7 @@ public class PizzaController : MonoBehaviour
     public float burnTime;
     private bool isCurrentlyBaking = false;
     public bool IsCurrentlyBaking => isCurrentlyBaking;
+
     public static event Action<GameObject> InBaking;
 
 
@@ -48,7 +49,7 @@ public class PizzaController : MonoBehaviour
     public GameObject saucedDoughInstance;
     public GameObject currentBakedPizzaInstance;
 
-    public TextMeshPro tempDebug;
+
 
     public GameObject pizzaLabelPrefab;
     private PizzaLabelUI pizzaLabelUI;
@@ -64,14 +65,14 @@ public class PizzaController : MonoBehaviour
     private void OnEnable()
     {
         doughController.OnDoughFlattened += OnDoughFlattened;
-        ToppingHandler.OnToppingsCompleted += OnToppingsCompleted;
     }
 
     private void OnDisable()
     {
         doughController.OnDoughFlattened -= OnDoughFlattened;
-        ToppingHandler.OnToppingsCompleted -= OnToppingsCompleted;
     }
+
+
 
     void Update()
     {
@@ -106,6 +107,8 @@ public class PizzaController : MonoBehaviour
         if (!insideOvenNow && isCurrentlyBaking)
         {
             isCurrentlyBaking = false;
+            OvenController.Instance.isSomethingCooking = false;
+
             InBaking?.Invoke(null); // or use a separate OnBakingStopped event
             Debug.Log("[Pizza] Left oven, baking stopped");
         }
@@ -148,12 +151,7 @@ public class PizzaController : MonoBehaviour
             return;
         }
 
-        // Debug
-        tempDebug.text = $"Distance to oven (XZ): {distanceToOven:F2} (radius {OvenController.Instance.cookRadius})\n" +
-                         $"Is inside oven: {isInsideOven}\n" +
-                         $"BakeTimer: {bakeTimer:F2}/{bakeTime}\n" +
-                         $"BakeState: {bakeState}\n" +
-                         $"AssemblyPhase: {assemblyPhase}";
+
     }
     // --- Oven interaction methods ---
     public void EnterOven(Transform ovenPoint)
@@ -322,18 +320,13 @@ public class PizzaController : MonoBehaviour
         pos.y += 0.02f;
 
         GameObject flat = Instantiate(flattenedDoughPrefab, parent);
+        Debug.Log($"Instantiated {"flattened prefab for order {orderId}: {pizza.name}"}");
         flattenedDoughInstance = flat;
         flat.transform.localPosition = pos;
         flat.transform.localRotation = rot;
         UpdateLabelTarget();
-        SpawnSauceSpreadRecognizerComponent(flat);
-        SauceSpreadRecognizer sauceSpreadRecognizer = flattenedDoughInstance.GetComponentInChildren<SauceSpreadRecognizer>();
-        if (!sauceSpreadRecognizer)
-        {
-            Debug.Log("sauce spread recog is coked");
+        SpawnSauceSpreadRecognizerComponent(flattenedDoughInstance);
 
-        }
-        sauceSpreadRecognizer.OnSauceComplete += OnSauceCompleted;
 
     }
 
@@ -352,6 +345,7 @@ public class PizzaController : MonoBehaviour
 
         GameObject sauced = Instantiate(SaucedflattenedDoughPrefab, parent);
         saucedDoughInstance = sauced;
+        saucedDoughInstance.GetComponentInChildren<ToppingHandler>().OnToppingsCompleted += OnToppingsCompleted;
         sauced.transform.localPosition = pos;
         sauced.transform.localRotation = rot;
         UpdateLabelTarget();
@@ -362,11 +356,13 @@ public class PizzaController : MonoBehaviour
     {
         if (sauceSpreadRecognizerPrefab == null)
         {
-            Debug.LogError("[PizzaController] No SauceSpreadRecognizer prefab assigned!");
+            Debug.Log("[PizzaController] No SauceSpreadRecognizer prefab assigned!");
             return;
         }
 
+
         GameObject recognizer = Instantiate(sauceSpreadRecognizerPrefab, flattenedDough.transform);
+        Debug.Log($"Instantiated SauceSpreadRecognizer for order {orderData.orderId}: {orderData.name}");
         recognizer.transform.localPosition = Vector3.zero;
         recognizer.transform.localRotation = Quaternion.identity;
 
@@ -375,6 +371,9 @@ public class PizzaController : MonoBehaviour
             flattenedDough.transform.Find("UI/SauceStatusText")?.GetComponent<TextMeshPro>();
         sauceSpreadRecognizer.sauceProgressText =
             flattenedDough.transform.Find("UI/SauceProgressText")?.GetComponent<TextMeshPro>();
+
+
+        sauceSpreadRecognizer.OnSauceComplete += OnSauceCompleted;
     }
 
     private void HookToppingUI(GameObject sauceDough)

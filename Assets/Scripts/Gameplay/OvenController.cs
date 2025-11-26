@@ -47,15 +47,5 @@ public class OvenController : Singleton<OvenController>
 
 
 
-    void Update()
-    {
-        if (isSomethingCooking)
-        {
-            transform.Find("CookingCollider").gameObject.SetActive(true);
-        }
-        else
-        {
-            transform.Find("CookingCollider").gameObject.SetActive(false);
-        }
-    }
+
 }

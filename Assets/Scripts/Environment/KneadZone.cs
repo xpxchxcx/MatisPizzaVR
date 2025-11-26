@@ -7,12 +7,12 @@ public class KneadZone : MonoBehaviour
     [Header("Target Dough Controller")]
     public DoughController doughController;
 
-    public TextMeshPro tmp;
+
 
 
     private void OnTriggerEnter(Collider other)
     {
-        tmp.text = $"{other.name} touched knead zone of dough";
+
         Debug.Log($"{other.name} touched knead zone of dough");
         if (other.gameObject.CompareTag("hand"))
         {

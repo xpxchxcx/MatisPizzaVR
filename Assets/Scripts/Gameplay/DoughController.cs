@@ -36,7 +36,7 @@ public class DoughController : MonoBehaviour
         AssemblyManager.EndKneadRightGestureEvent += EndRightKneadGesture;
         AssemblyManager.EndKneadLeftGestureEvent += EndLeftKneadGesture;
 
-        pizzaController = GetComponent<PizzaController>();
+        pizzaController = GetComponentInParent<PizzaController>();
         kneadZone = GetComponent<KneadZone>();
         doughDebugManager = FindFirstObjectByType<DoughDebugManager>();
 

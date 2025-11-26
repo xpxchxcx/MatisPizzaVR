@@ -5,7 +5,7 @@ using TMPro;
 
 public class ToppingHandler : MonoBehaviour
 {
-    public static event Action OnToppingsCompleted;
+    public event Action OnToppingsCompleted;
     [Header("References")]
     [SerializeField] private PizzaController pizzaController;
     [Header("Debug UI")]
@@ -36,10 +36,10 @@ public class ToppingHandler : MonoBehaviour
 
 
     // Helper method for tests to trigger the event
-    public static void TriggerOnToppingsCompleted()
-    {
-        OnToppingsCompleted?.Invoke();
-    }
+    //public static void TriggerOnToppingsCompleted()
+    //{
+    //     OnToppingsCompleted.Invoke();
+    // }
 
 
     void Start()
