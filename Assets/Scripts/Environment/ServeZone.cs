@@ -14,25 +14,38 @@ public class ServeZone : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (!other.CompareTag("pizza")) return;
-
-        PizzaController pizza = other.GetComponent<PizzaController>();
-        if (pizza == null)
+        if (other.CompareTag("cooked"))
         {
-            Debug.LogWarning("[ServeZone] Object entered but no PizzaController found!");
-            return;
+            PizzaController pizza = other.GetComponentInParent<PizzaController>();
+            if (pizza == null)
+            {
+                Debug.LogWarning("[ServeZone] Object entered but no PizzaController found!");
+                return;
+            }
+
+            if (pizza.assemblyPhase == AssemblyPhase.Baked)
+            {
+                // Mark as served
+                pizza.OnServed();
+                // Validate against the active order
+                bool success = OrderManager.Instance.ValidatePizzaAndCompleteOrder(pizza);
+
+                // Fire pizza served event. Currently listened to by ScoreManager.
+                OnPizzaServed?.Invoke(pizza, success);
+
+                // Cleanup
+                AssemblyManager.Instance.CompletePizza(pizza);
+            }
+
+
+
         }
 
-        // Mark as served
-        pizza.OnServed();
 
-        // Validate against the active order
-        bool success = OrderManager.Instance.ValidatePizzaAndCompleteOrder(pizza);
 
-        // Fire pizza served event. Currently listened to by ScoreManager.
-        OnPizzaServed?.Invoke(pizza, success);
 
-        // Cleanup
-        AssemblyManager.Instance.CompletePizza(pizza);
+
+
+
     }
 }

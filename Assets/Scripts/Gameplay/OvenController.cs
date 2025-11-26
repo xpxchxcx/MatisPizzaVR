@@ -13,6 +13,18 @@ public class OvenController : Singleton<OvenController>
     public bool isSomethingCooking = false;
 
     public Transform ovenPoint;
+    [Header("Oven Cooking Settings")]
+    [Tooltip("Radius around ovenPoint where pizza continues cooking.")]
+    public float cookRadius = 0.35f;
+
+    private void OnDrawGizmos()
+    {
+        if (ovenPoint == null)
+            return;
+
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(ovenPoint.position, cookRadius);
+    }
 
     private void OnTriggerEnter(Collider other)
     {
@@ -33,14 +45,7 @@ public class OvenController : Singleton<OvenController>
         }
     }
 
-    private void OnTriggerExit(Collider other)
-    {
 
-        if (other.CompareTag("cooked"))
-        {
-            isSomethingCooking = false;
-        }
-    }
 
     void Update()
     {

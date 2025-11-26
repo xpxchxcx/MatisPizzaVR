@@ -61,6 +61,7 @@ public class AssemblyManager : Singleton<AssemblyManager>
         activePizzas.Add(pizza);
         UpdatePizzaListDisplay();
         Debug.Log($"[AssemblyManager] Registered pizza '{pizza.pizzaName}' for order: {order.pizzaName}");
+        pizza.InitLabel();
 
 
     }

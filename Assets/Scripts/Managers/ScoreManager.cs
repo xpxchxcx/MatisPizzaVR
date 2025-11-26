@@ -7,7 +7,7 @@ public class ScoreManager : Singleton<ScoreManager>
     [Header("Scoring Settings")]
     [SerializeField] private int baseScore = 100;
     [SerializeField] private int penaltyBurnt = -50;
-    [SerializeField] private int penaltyWrongToppings = -25;
+    //[SerializeField] private int penaltyWrongToppings = -25;
 
     private int currentScore = 0;
     public event Action<int> OnScoreChanged;
@@ -34,17 +34,18 @@ public class ScoreManager : Singleton<ScoreManager>
         {
             AddScore(penaltyBurnt);
         }
-        else
-        {
-            AddScore(penaltyWrongToppings);
-        }
-        return;
+        //else
+        //{
+        //   AddScore(penaltyWrongToppings);
+        //}
+        //return;
     }
 
     // For UI updates
     public void AddScore(int points)
     {
         currentScore += points;
+        Debug.Log($"Current Score: {currentScore}");
         OnScoreChanged?.Invoke(currentScore);
     }
     public int GetScore()

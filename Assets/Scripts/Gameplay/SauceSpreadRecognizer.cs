@@ -3,9 +3,9 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class SauceSpreadRecognizer : MonoBehaviour
+public class SauceSpreadRecognizer : Singleton<SauceSpreadRecognizer>
 {
-    public static event Action<GameObject> OnSauceComplete;
+    public Action<GameObject> OnSauceComplete;
     [SerializeField] private int sauceVolumeRequired = 3;
     public float SauceVolumeRequired => sauceVolumeRequired;
     private int currentSauceVolume = 0;

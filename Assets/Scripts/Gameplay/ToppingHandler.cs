@@ -14,6 +14,7 @@ public class ToppingHandler : MonoBehaviour
     [Header("UI")]
     public TextMeshPro toppingsHeader;
     public TextMeshPro toppingsProgress;
+    public GameObject UI;
 
 
     private Dictionary<string, int> currentToppings = new();
@@ -22,6 +23,7 @@ public class ToppingHandler : MonoBehaviour
 
     public float pizzaRadius = 0.5f;
     public float yOffset = 0.02f;
+
 
     public void SetToppingAllowed(bool val)
     {
@@ -108,6 +110,7 @@ public class ToppingHandler : MonoBehaviour
         Debug.Log($"<color=green>[ToppingHandler] All toppings complete for {pizzaController.pizzaName}!</color>");
         toppingsHeader.text = "";
         toppingsProgress.text = "";
+        UI.SetActive(false);
     }
 
     /// <summary>
