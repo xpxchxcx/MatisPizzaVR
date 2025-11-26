@@ -63,14 +63,12 @@ public class PizzaController : MonoBehaviour
 
     private void OnEnable()
     {
-        SauceSpreadRecognizer.Instance.OnSauceComplete += OnSauceCompleted;
         doughController.OnDoughFlattened += OnDoughFlattened;
         ToppingHandler.OnToppingsCompleted += OnToppingsCompleted;
     }
 
     private void OnDisable()
     {
-        SauceSpreadRecognizer.Instance.OnSauceComplete -= OnSauceCompleted;
         doughController.OnDoughFlattened -= OnDoughFlattened;
         ToppingHandler.OnToppingsCompleted -= OnToppingsCompleted;
     }
@@ -329,6 +327,14 @@ public class PizzaController : MonoBehaviour
         flat.transform.localRotation = rot;
         UpdateLabelTarget();
         SpawnSauceSpreadRecognizerComponent(flat);
+        SauceSpreadRecognizer sauceSpreadRecognizer = flattenedDoughInstance.GetComponentInChildren<SauceSpreadRecognizer>();
+        if (!sauceSpreadRecognizer)
+        {
+            Debug.Log("sauce spread recog is coked");
+
+        }
+        sauceSpreadRecognizer.OnSauceComplete += OnSauceCompleted;
+
     }
 
     public void SpawnSaucedFlattenedDough()
