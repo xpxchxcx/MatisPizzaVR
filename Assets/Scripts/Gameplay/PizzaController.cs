@@ -97,7 +97,7 @@ public class PizzaController : MonoBehaviour
     public void EnterOven(Transform ovenPoint)
     {
 
-        //saucedDoughInstance.transform.position = ovenPoint.position;
+        saucedDoughInstance.transform.position = ovenPoint.position;
         if (assemblyPhase != AssemblyPhase.ReadyForOven)
         {
             Debug.LogWarning("[Pizza] Not ready for oven.");
@@ -115,44 +115,7 @@ public class PizzaController : MonoBehaviour
         Debug.Log("[Pizza] Entered oven, baking started.");
     }
 
-    public void ExitOven()
-    {
-        isInsideOven = false;
-        Debug.Log($"[Pizza] ExitOven called: {isInsideOven}");
 
-        FinalizeBaking();
-        Debug.Log("[Pizza] Exited oven.");
-    }
-
-    private void FinalizeBaking()
-    {
-        float cookedThreshold = bakeTime;
-        float burntThreshold = bakeTime + burnTime;
-
-        if (bakeTimer < cookedThreshold)
-        {
-            bakeState = BakeState.Raw;
-            isCooked = false;
-            isBurnt = false;
-            Debug.Log("[Pizza] Removed early → RAW.");
-        }
-        else if (bakeTimer < burntThreshold)
-        {
-            bakeState = BakeState.Cooked;
-            isCooked = true;
-            isBurnt = false;
-            if (finalPizzaInstance == null) SpawnFinalPizza(false);
-            Debug.Log("[Pizza] Cooked correctly when removed.");
-        }
-        else
-        {
-            bakeState = BakeState.Burnt;
-            isCooked = false;
-            isBurnt = true;
-            if (finalPizzaInstance == null) SpawnFinalPizza(true);
-            Debug.Log("[Pizza] Burnt when removed.");
-        }
-    }
 
     // --- Existing methods for dough, sauce, toppings ---
     public void InitializeFromOrder(OrderData order)
@@ -366,6 +329,8 @@ public class PizzaController : MonoBehaviour
             spawnPos = transform.position;
             spawnRot = transform.rotation;
         }
+
+        spawnPos.y += 0.03f;
 
         GameObject prefabToSpawn = burned
             ? pizzaBakePrefabs.GetBurntPrefab()

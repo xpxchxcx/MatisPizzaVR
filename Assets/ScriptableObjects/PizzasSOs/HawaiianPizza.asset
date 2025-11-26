@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: HawaiianPizza
   m_EditorClassIdentifier: Assembly-CSharp::OrderData
   orderId: 002
-  pizzaName: Haiwaiian
+  pizzaName: Hawaiian
   requiredToppings:
   - toppingName: pineapple
     requiredCount: 6

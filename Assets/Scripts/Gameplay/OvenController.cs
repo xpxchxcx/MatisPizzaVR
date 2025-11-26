@@ -10,6 +10,8 @@ public class OvenController : Singleton<OvenController>
     [Tooltip("Seconds after baking before pizza burns if not collected.")]
     public float burnTime = 10f;
 
+    public bool isSomethingCooking = false;
+
     public Transform ovenPoint;
 
     private void OnTriggerEnter(Collider other)
@@ -19,9 +21,9 @@ public class OvenController : Singleton<OvenController>
             PizzaController pizza = other.GetComponentInParent<PizzaController>();
 
 
-            if (pizza.assemblyPhase < AssemblyPhase.ReadyForOven)
+            if (isSomethingCooking || pizza.assemblyPhase < AssemblyPhase.ReadyForOven || pizza.assemblyPhase > AssemblyPhase.Baked)
             {
-                Debug.Log("[Oven] Wrong phase for baking.");
+                Debug.Log("[Oven] Wrong phase for baking. Or something is baking already");
                 return;
             }
             Debug.Log("[Oven]calling enter oven.");
@@ -34,10 +36,21 @@ public class OvenController : Singleton<OvenController>
     private void OnTriggerExit(Collider other)
     {
 
-        var pizza = other.GetComponentInParent<PizzaController>();
-        if (pizza == null) return;
+        if (other.CompareTag("cooked"))
+        {
+            isSomethingCooking = false;
+        }
+    }
 
-        pizza.ExitOven();
-        Debug.Log("[Oven] Pizza removed from oven.");
+    void Update()
+    {
+        if (isSomethingCooking)
+        {
+            transform.Find("CookingCollider").gameObject.SetActive(true);
+        }
+        else
+        {
+            transform.Find("CookingCollider").gameObject.SetActive(false);
+        }
     }
 }

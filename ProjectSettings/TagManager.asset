@@ -21,6 +21,7 @@ TagManager:
   - pineapple
   - black olive
   - black meat
+  - cooked
   layers:
   - Default
   - TransparentFX
