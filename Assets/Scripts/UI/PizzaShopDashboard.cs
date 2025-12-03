@@ -5,21 +5,13 @@ using System.Collections.Generic;
 
 public class PizzaShopDashboard : MonoBehaviour
 {
-    [Header("UI Prefabs")]
-    public GameObject orderRowPrefab;
-    public GameObject pizzaRowPrefab;
 
-    [Header("UI Containers")]
-    public Transform orderListParent;
-    public Transform pizzaListParent;
 
     [Header("Hand Tracking")]
     public GameObject dashboardCanvas;
     public Transform leftHandTransform;
     public Vector3 offset = new Vector3(0.15f, 0.10f, 0.10f);
 
-    private readonly List<GameObject> orderRows = new();
-    private readonly List<GameObject> pizzaRows = new();
     private bool isDashboardGesture = false;
 
     void OnEnable()
@@ -111,68 +103,23 @@ public class PizzaShopDashboard : MonoBehaviour
     // ---------------- Orders ----------------
     private void RefreshOrdersUI()
     {
-        foreach (var row in orderRows) Destroy(row);
-        orderRows.Clear();
 
-        var orders = OrderManager.Instance;
-
-        foreach (var order in orders.activeOrders)
-            AddOrderRow(order, "Not Started");
-
-        foreach (var order in orders.startedOrders)
-            AddOrderRow(order, "In Progress");
-
-        foreach (var order in orders.completedOrders)
-            AddOrderRow(order, "COMPLETED");
     }
 
     private void AddOrderRow(OrderData order, string state)
     {
-        GameObject row = Instantiate(orderRowPrefab, orderListParent);
 
-        TextMeshProUGUI orderIdTMP = row.transform.Find("Canvas/OrderID")?.GetComponent<TextMeshProUGUI>();
-        TextMeshProUGUI pizzaNameTMP = row.transform.Find("Canvas/PizzaName")?.GetComponent<TextMeshProUGUI>();
-        TextMeshProUGUI statusTMP = row.transform.Find("Canvas/Status")?.GetComponent<TextMeshProUGUI>();
-
-        if (orderIdTMP != null) orderIdTMP.text = order.orderId;
-        if (pizzaNameTMP != null) pizzaNameTMP.text = order.pizzaName;
-        if (statusTMP != null) statusTMP.text = state;
-
-        // Space each row vertically
-        RectTransform rt = row.GetComponent<RectTransform>();
-        if (rt != null)
-            rt.anchoredPosition = new Vector2(0, -110 * orderRows.Count);
-
-        orderRows.Add(row);
     }
 
     // ---------------- Pizzas ----------------
     private void RefreshPizzasUI()
     {
-        foreach (var row in pizzaRows) Destroy(row);
-        pizzaRows.Clear();
 
-        foreach (var pizza in AssemblyManager.Instance.activePizzas)
-            AddPizzaRow(pizza);
     }
 
     private void AddPizzaRow(PizzaController pizza)
     {
-        GameObject row = Instantiate(pizzaRowPrefab, pizzaListParent);
 
-        TextMeshProUGUI orderIdTMP = row.transform.Find("Canvas/OrderID")?.GetComponent<TextMeshProUGUI>();
-        TextMeshProUGUI pizzaNameTMP = row.transform.Find("Canvas/PizzaName")?.GetComponent<TextMeshProUGUI>();
-        TextMeshProUGUI phaseTMP = row.transform.Find("Canvas/Phase")?.GetComponent<TextMeshProUGUI>();
-
-        if (orderIdTMP != null) orderIdTMP.text = pizza.orderData.orderId;
-        if (pizzaNameTMP != null) pizzaNameTMP.text = pizza.pizzaName;
-        if (phaseTMP != null) phaseTMP.text = pizza.assemblyPhase.ToString();
-
-        RectTransform rt = row.GetComponent<RectTransform>();
-        if (rt != null)
-            rt.anchoredPosition = new Vector2(0, -110 * pizzaRows.Count);
-
-        pizzaRows.Add(row);
     }
 
     private int PhaseToProgress(AssemblyPhase phase)
