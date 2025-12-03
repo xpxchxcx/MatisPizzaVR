@@ -1,5 +1,6 @@
 using UnityEngine;
 using System;
+using AudioSystem;
 
 public class ServeZone : MonoBehaviour
 {
@@ -16,6 +17,7 @@ public class ServeZone : MonoBehaviour
     {
         if (other.CompareTag("cooked"))
         {
+            SoundManager.Instance.PlaySFX("Place");
             PizzaController pizza = other.GetComponentInParent<PizzaController>();
             if (pizza == null)
             {
@@ -29,7 +31,7 @@ public class ServeZone : MonoBehaviour
                 pizza.OnServed();
                 // Validate against the active order
                 bool success = OrderManager.Instance.ValidatePizzaAndCompleteOrder(pizza);
-
+                OrderManager.Instance.MarkOrderCompleted(pizza.orderData);
                 // Fire pizza served event. Currently listened to by ScoreManager.
                 OnPizzaServed?.Invoke(pizza, success);
 

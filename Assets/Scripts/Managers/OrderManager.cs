@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System;
 using TMPro;
 using System.Linq;
+using AudioSystem;
 
 public class OrderManager : Singleton<OrderManager>
 {
@@ -99,8 +100,9 @@ public class OrderManager : Singleton<OrderManager>
         activeOrders.Add(newOrder);
         Debug.Log($"[OrderManager] Spawned new order: {newOrder.pizzaName}");
 
-        // Trigger event
+        // Trigger event 
         OnOrderSpawned?.Invoke(newOrder);
+        SoundManager.Instance.PlaySFX("New_Order");
     }
 
     /// <summary>

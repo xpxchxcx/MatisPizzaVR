@@ -1,4 +1,5 @@
 using System;
+using AudioSystem;
 using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -38,6 +39,7 @@ public class SauceSpreadRecognizer : MonoBehaviour
     {
         if (canBeSauced)
         {
+            SoundManager.Instance.PlaySFX("Sauce_Drop");
             currentSauceVolume += 1;
             Debug.Log($"Sauce spreading! Volume: {currentSauceVolume}/{sauceVolumeRequired}");
             UpdateUI();

@@ -1,4 +1,5 @@
 using System;
+using AudioSystem;
 using TMPro;
 using UnityEngine;
 
@@ -14,6 +15,7 @@ public class SauceSurface : MonoBehaviour
     {
         if (other.CompareTag("flattened"))
         {
+            SoundManager.Instance.PlaySFX("Place");
             GameObject go = other.gameObject;
             PizzaController currentPizzaController = go.transform.parent.GetComponent<PizzaController>();
 

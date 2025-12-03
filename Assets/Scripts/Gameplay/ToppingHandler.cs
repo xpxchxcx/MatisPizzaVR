@@ -2,6 +2,7 @@ using UnityEngine;
 using System.Collections.Generic;
 using System;
 using TMPro;
+using AudioSystem;
 
 public class ToppingHandler : MonoBehaviour
 {
@@ -173,7 +174,7 @@ public class ToppingHandler : MonoBehaviour
 
         // 1. Instantiate as a child of the pizza
         GameObject newTopping = Instantiate(prefab, pizzaController.saucedDoughInstance.transform);
-
+        SoundManager.Instance.PlaySFX("Toppings_Snap");
         // 2. Reset local position and rotation
         newTopping.transform.localPosition = Vector3.zero; // Start at pizza center
         newTopping.transform.localRotation = Quaternion.identity;

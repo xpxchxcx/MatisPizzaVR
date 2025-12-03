@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using TMPro;
 using System;
 using UnityEngine.UI;
+using AudioSystem;
 
 public class PizzaController : MonoBehaviour
 {
@@ -98,6 +99,7 @@ public class PizzaController : MonoBehaviour
         // Fire event only when entering the oven
         if (insideOvenNow && !isCurrentlyBaking)
         {
+            SoundManager.Instance.PlayLoopSFX("Pizza_Cooking");
             isCurrentlyBaking = true;
             InBaking?.Invoke(bakingGO);
             Debug.Log("[Pizza] Entered oven, baking started");
@@ -106,6 +108,8 @@ public class PizzaController : MonoBehaviour
         // Fire event only when leaving the oven
         if (!insideOvenNow && isCurrentlyBaking)
         {
+            SoundManager.Instance.StopLoopSFX("Pizza_Cooking");
+
             isCurrentlyBaking = false;
             OvenController.Instance.isSomethingCooking = false;
 
@@ -140,6 +144,8 @@ public class PizzaController : MonoBehaviour
         if (bakeTimer >= cookedThreshold && bakeState == BakeState.Raw)
         {
             bakeState = BakeState.Cooked;
+            SoundManager.Instance.StopLoopSFX("Pizza_Timer_Done");
+
             isCooked = true;
             isBurnt = false;
 

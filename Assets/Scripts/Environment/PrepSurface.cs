@@ -1,4 +1,5 @@
 using System;
+using AudioSystem;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -18,6 +19,7 @@ public class PrepSurface : MonoBehaviour
     {
         if (other.CompareTag("dough"))
         {
+            SoundManager.Instance.PlaySFX("Place");
             GameObject doughGo = other.gameObject;
             DoughController currentDoughController = doughGo.GetComponentInChildren<DoughController>();
 

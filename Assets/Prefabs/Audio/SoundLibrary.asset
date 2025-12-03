@@ -1,0 +1,79 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3901aba87757eb7408adef28230dd995, type: 3}
+  m_Name: SoundLibrary
+  m_EditorClassIdentifier: Assembly-CSharp::SoundLibrarySO
+  entries:
+  - type: 0
+    sfxCategory: 0
+    id: Crowd
+    data:
+      clip: {fileID: 8300000, guid: 92cee253383e94c4ea5e84272ef5711e, type: 3}
+      mixerGroup: {fileID: -4581930180537342399, guid: 329b287e05431c549ad6ae8e0075c8d3, type: 2}
+      loop: 1
+      playOnAwake: 0
+  - type: 0
+    sfxCategory: 0
+    id: BGM
+    data:
+      clip: {fileID: 8300000, guid: 8d2515e981ecd0b45a70cc5bc06124de, type: 3}
+      mixerGroup: {fileID: -1134041740191280188, guid: 329b287e05431c549ad6ae8e0075c8d3, type: 2}
+      loop: 1
+      playOnAwake: 0
+  - type: 0
+    sfxCategory: 0
+    id: New_Order
+    data:
+      clip: {fileID: 8300000, guid: 03ea0a5099ace5948b2bd0374464d62d, type: 3}
+      mixerGroup: {fileID: 6424507317399804553, guid: 329b287e05431c549ad6ae8e0075c8d3, type: 2}
+      loop: 0
+      playOnAwake: 0
+  - type: 0
+    sfxCategory: 0
+    id: Pizza_Cooking
+    data:
+      clip: {fileID: 8300000, guid: dce4738269a4eed458f3062bd08eab9b, type: 3}
+      mixerGroup: {fileID: -6784760782737958647, guid: 329b287e05431c549ad6ae8e0075c8d3, type: 2}
+      loop: 0
+      playOnAwake: 0
+  - type: 0
+    sfxCategory: 0
+    id: Pizza_Timer_Done
+    data:
+      clip: {fileID: 8300000, guid: 0c885e991efbe684ea1b8dc19049a122, type: 3}
+      mixerGroup: {fileID: -1134041740191280188, guid: 329b287e05431c549ad6ae8e0075c8d3, type: 2}
+      loop: 0
+      playOnAwake: 0
+  - type: 0
+    sfxCategory: 0
+    id: Toppings_Snap
+    data:
+      clip: {fileID: 8300000, guid: bcc8b7e18ffa1bd4d92d4cfed21f8898, type: 3}
+      mixerGroup: {fileID: -4670112350630073585, guid: 329b287e05431c549ad6ae8e0075c8d3, type: 2}
+      loop: 0
+      playOnAwake: 0
+  - type: 0
+    sfxCategory: 0
+    id: Sauce_Drop
+    data:
+      clip: {fileID: 8300000, guid: 29ec086f82fa6af4c9f0df4c96f5f15c, type: 3}
+      mixerGroup: {fileID: -3884966452326751898, guid: 329b287e05431c549ad6ae8e0075c8d3, type: 2}
+      loop: 0
+      playOnAwake: 0
+  - type: 0
+    sfxCategory: 0
+    id: Place
+    data:
+      clip: {fileID: 8300000, guid: 6f97ab4759f16e742a9d281f184ac840, type: 3}
+      mixerGroup: {fileID: -609459856380611165, guid: 329b287e05431c549ad6ae8e0075c8d3, type: 2}
+      loop: 0
+      playOnAwake: 0

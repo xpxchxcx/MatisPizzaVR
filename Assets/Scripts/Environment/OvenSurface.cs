@@ -1,4 +1,5 @@
 using System;
+using AudioSystem;
 using UnityEngine;
 
 public class OvenSurface : MonoBehaviour
@@ -10,6 +11,7 @@ public class OvenSurface : MonoBehaviour
     {
         if (other.CompareTag("sauced"))
         {
+            SoundManager.Instance.PlaySFX("Place");
             GameObject go = other.gameObject;
             PizzaController currentPizzaController = go.transform.parent.GetComponent<PizzaController>();
 
