@@ -11,8 +11,23 @@ public class PizzaLabelUI : MonoBehaviour
     private Transform targetPizza;
     private Transform xrCamera;
 
-    public void Initialize(Transform pizzaTransform, string orderNumber, string pizzaType, float maxProgress, Transform xrCam)
+    private PizzaController parentPizzaController;
+
+    public void Destruct()
     {
+        Destroy(this);
+    }
+
+    void OnDisable()
+    {
+        parentPizzaController.PizzaDead -= Destruct;
+    }
+
+
+    public void Initialize(GameObject go, Transform pizzaTransform, string orderNumber, string pizzaType, float maxProgress, Transform xrCam)
+    {
+        parentPizzaController = go.GetComponent<PizzaController>();
+        parentPizzaController.PizzaDead += Destruct;
         targetPizza = pizzaTransform;
         xrCamera = xrCam;
         orderNumberText.text = $"Order: {orderNumber}";
@@ -38,6 +53,7 @@ public class PizzaLabelUI : MonoBehaviour
     {
         if (assemblyProgressSlider != null)
             assemblyProgressSlider.value = progress;
+        if (progress == 6) Destroy(this);
     }
 
     void LateUpdate()

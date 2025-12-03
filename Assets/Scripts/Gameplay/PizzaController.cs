@@ -33,7 +33,7 @@ public class PizzaController : MonoBehaviour
     public bool IsCurrentlyBaking => isCurrentlyBaking;
 
     public static event Action<GameObject> InBaking;
-
+    public event Action PizzaDead;
 
     public PizzaBakedPrefabs pizzaBakePrefabs;
     private GameObject finalPizzaInstance; // store the currently spawned cooked/burnt pizza
@@ -54,6 +54,7 @@ public class PizzaController : MonoBehaviour
 
     public GameObject pizzaLabelPrefab;
     private PizzaLabelUI pizzaLabelUI;
+    public PizzaLabelUI PizzaLabelUI => pizzaLabelUI;
 
 
     void Start()
@@ -264,15 +265,33 @@ public class PizzaController : MonoBehaviour
     {
         assemblyPhase = AssemblyPhase.Served;
         isServed = true;
-        Debug.Log($"[PizzaController] {pizzaName} served!");
-        Destroy(this.gameObject, 2f);
         UpdateLabelProgress();
+
+        Destroy(PizzaLabelUI, 1f);
+        Debug.Log($"[PizzaController] {pizzaName} served!");
+        PizzaDead?.Invoke();
+        Destroy(this.gameObject, 2f);
         // put somme vfx and sound
 
     }
 
     public bool ValidateAgainstOrder()
     {
+        Debug.Log("===== VALIDATING PIZZA =====");
+
+        // Show all toppings on pizza
+        Debug.Log("TOPPINGS ON PIZZA:");
+        foreach (var kvp in toppings)
+            Debug.Log($" - {kvp.Key}: {kvp.Value}");
+
+        // Show required toppings
+        Debug.Log("REQUIRED TOPPINGS:");
+        foreach (var req in orderData.requiredToppings)
+            Debug.Log($" - {req.toppingName}: {req.requiredCount}");
+
+        Debug.Log($"Cooked: {isCooked}, Sauced: {isSauced}, Burnt: {isBurnt}");
+
+
         if (orderData == null) return false;
         if (!isCooked || !isSauced) return false;
         if (isBurnt) return false;
@@ -282,13 +301,15 @@ public class PizzaController : MonoBehaviour
             if (!toppings.TryGetValue(req.toppingName, out int count))
             {
                 Debug.LogWarning($"[PizzaController] Missing topping: {req.toppingName}");
-                return false;
+                return true;
+                //return false;
             }
 
             if (count < req.requiredCount)
             {
                 Debug.LogWarning($"[PizzaController] Not enough {req.toppingName} (needed {req.requiredCount}, got {count})");
-                return false;
+                return true;
+                //return false;
             }
         }
 
@@ -442,7 +463,10 @@ public class PizzaController : MonoBehaviour
     public void UpdateLabelTarget()
     {
         if (pizzaLabelUI == null)
-            return;
+        {
+            Debug.Log("label pizza ui is null"); return;
+        }
+
 
         // Pick the current "active" instance
         GameObject currentGO = null;
@@ -473,7 +497,7 @@ public class PizzaController : MonoBehaviour
 
         // Assign UI elements
         pizzaLabelUI.SetUIElements(orderText, pizzaText, slider);
-        pizzaLabelUI.Initialize(unflattenedDoughInstance.transform, orderData.orderId, pizzaName, 6, xrCam);
+        pizzaLabelUI.Initialize(this.gameObject, unflattenedDoughInstance.transform, orderData.orderId, pizzaName, 6, xrCam);
         UpdateLabelProgress();
     }
 

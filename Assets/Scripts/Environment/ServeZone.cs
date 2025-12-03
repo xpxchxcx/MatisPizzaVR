@@ -28,15 +28,17 @@ public class ServeZone : MonoBehaviour
             if (pizza.assemblyPhase == AssemblyPhase.Baked)
             {
                 // Mark as served
-                pizza.OnServed();
+
                 // Validate against the active order
                 bool success = OrderManager.Instance.ValidatePizzaAndCompleteOrder(pizza);
-                OrderManager.Instance.MarkOrderCompleted(pizza.orderData);
+                ///OrderManager.Instance.MarkOrderCompleted(pizza.orderData);
                 // Fire pizza served event. Currently listened to by ScoreManager.
                 OnPizzaServed?.Invoke(pizza, success);
 
                 // Cleanup
                 AssemblyManager.Instance.CompletePizza(pizza);
+
+                pizza.OnServed();
             }
 
 
