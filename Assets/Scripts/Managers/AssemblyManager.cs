@@ -11,11 +11,20 @@ public class AssemblyManager : Singleton<AssemblyManager>
     public List<PizzaController> activePizzas = new();
     public TextMeshPro tmp;
 
+    public event Action<PizzaController> OnPizzaRegistered;
+    public event Action<PizzaController> OnPizzaUnregistered;
     public static event Action StartKneadRightGestureEvent;
     public static event Action StartKneadLeftGestureEvent;
 
     public static event Action EndKneadRightGestureEvent;
     public static event Action EndKneadLeftGestureEvent;
+
+
+    public static event Action StartDashboardLeftGestureEvent;
+
+
+    public static event Action EndDashboardLeftGestureEvent;
+
 
     //helpers
 
@@ -59,6 +68,7 @@ public class AssemblyManager : Singleton<AssemblyManager>
 
         pizza.InitializeFromOrder(order);
         activePizzas.Add(pizza);
+        OnPizzaRegistered?.Invoke(pizza);
         UpdatePizzaListDisplay();
         Debug.Log($"[AssemblyManager] Registered pizza '{pizza.pizzaName}' for order: {order.pizzaName}");
         pizza.InitLabel();
@@ -74,6 +84,7 @@ public class AssemblyManager : Singleton<AssemblyManager>
         if (pizza != null && activePizzas.Contains(pizza))
         {
             activePizzas.Remove(pizza);
+            OnPizzaUnregistered?.Invoke(pizza);
             Debug.Log($"[AssemblyManager] Unregistered pizza: {pizza.pizzaName}");
             UpdatePizzaListDisplay();
         }
@@ -202,6 +213,20 @@ public class AssemblyManager : Singleton<AssemblyManager>
     public void EndLeftKneadGesture()
     {
         EndKneadLeftGestureEvent.Invoke();
+
+    }
+    #endregion
+
+    #region Dashboard Gesture
+    public void StartDashboardLeftGesture()
+    {
+        StartDashboardLeftGestureEvent.Invoke();
+
+    }
+
+    public void EndDashboardLeftGesture()
+    {
+        EndDashboardLeftGestureEvent.Invoke();
 
     }
     #endregion
