@@ -714,6 +714,10 @@ PrefabInstance:
       propertyPath: m_LocalPosition.z
       value: 5.8
       objectReference: {fileID: 0}
+    - target: {fileID: -678588488315902003, guid: 1f4592a3efbe4b94ab0d14c513d87e65, type: 3}
+      propertyPath: 'm_Materials.Array.data[1]'
+      value: 
+      objectReference: {fileID: 2100000, guid: a8e14fd271551ff418723e3ee2045d86, type: 2}
     - target: {fileID: 919132149155446097, guid: 1f4592a3efbe4b94ab0d14c513d87e65, type: 3}
       propertyPath: m_Name
       value: boxenBoard
