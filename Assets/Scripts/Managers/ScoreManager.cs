@@ -30,7 +30,7 @@ public class ScoreManager : Singleton<ScoreManager>
     void Start()
     {
         ServeZone.OnPizzaServed += HandlePizzaServed;
-        scoreTMP.text = $"Score: {currentScore}";
+        scoreTMP.text = $"{currentScore}";
     }
     private void HandlePizzaServed(PizzaController pizza, bool success)
     {
@@ -55,7 +55,7 @@ public class ScoreManager : Singleton<ScoreManager>
     {
         currentScore += points;
         Debug.Log($"Current Score: {currentScore}");
-        scoreTMP.text = $"Score: {currentScore}";
+        scoreTMP.text = $"{currentScore}";
         OnScoreChanged?.Invoke(currentScore);
     }
     public int GetScore()
